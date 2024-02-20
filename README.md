@@ -1,3 +1,6 @@
 # RoommateRivalry
 
-This is the readme for our 307 group project.
+From root directory:
+- 'npm run front' to initialize frontend
+- 'npm run back' to intitialize backend
+- 'npm run back-dev' to intitialize backend with nodemon
