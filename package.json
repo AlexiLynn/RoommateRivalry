@@ -6,6 +6,15 @@
   },
   "scripts": {
     "format": "npx prettier . --write",
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "front": "cd packages/frontend && npm run start",
+    "back": "cd packages/express-backend && npm run start",
+    "back-dev": "cd packages/express-backend && npm run dev"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }

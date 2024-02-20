@@ -3,11 +3,11 @@ export default function Navbar() {
   return (
     <nav className="nav">
       <a href="/" className="site-title">
-        Roomate Rivalry
+        Roommate Rivalry
       </a>
       <ul>
         <li>
-          <a href="/roomates">Roomates</a>
+          <a href="/roommates">Roommates</a>
         </li>
         <li>
           <a href="/chores">Chores</a>
