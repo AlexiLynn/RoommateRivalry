@@ -14,11 +14,7 @@ const Layout = () => {
                 <img src={myImage} alt="Clean" />
             </div>
             <div className="TextContainer">
-                <h2><a href="/roomates" style={{ color: 'black', textAlign: 'center', textDecoration: 'none', borderBottom: '1px solid transparent' }}
-                onMouseOver={(e) => (e.currentTarget.style.borderBottom = '1px solid black')}
-                onMouseOut={(e) => (e.currentTarget.style.borderBottom = '1px solid transparent')}>
-                Charles
-                </a>
+                <h2>Johnny Clean
               </h2>
                 <p>Student @ Cal Poly</p>
             </div>
