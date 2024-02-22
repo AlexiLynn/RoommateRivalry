@@ -18,17 +18,17 @@
 
 .Column:nth-child(1) {
   flex: 2; /* Adjusted flex value for the first column, making it wider */
-  height: 235px
+  height: 235px;
 }
 
 .Column:nth-child(2) {
   flex: 1; /* Adjusted flex value for the second column */
-  height: 350px
+  height: 350px;
 }
 
 .Column:nth-child(3) {
   flex: 1; /* Adjusted flex value for the third column */
-  height: 500px
+  height: 500px;
 }
 
 .Column h2 {

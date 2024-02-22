@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 const HardcodedTable = () => {
   return (
@@ -14,9 +14,23 @@ const HardcodedTable = () => {
         <tr>
           <td>1</td>
           <td>
-            <a href="/roommates" style={{ color: 'black', textAlign: 'center', textDecoration: 'none', borderBottom: '1px solid transparent' }}
-              onMouseOver={(e) => (e.currentTarget.style.borderBottom = '1px solid black')}
-              onMouseOut={(e) => (e.currentTarget.style.borderBottom = '1px solid transparent')}>
+            <a
+              href="/roommates"
+              style={{
+                color: "black",
+                textAlign: "center",
+                textDecoration: "none",
+                borderBottom: "1px solid transparent"
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.borderBottom =
+                  "1px solid black")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.borderBottom =
+                  "1px solid transparent")
+              }
+            >
               Charles
             </a>
           </td>
@@ -25,9 +39,23 @@ const HardcodedTable = () => {
         <tr>
           <td>2</td>
           <td>
-            <a href="/roommates" style={{ color: 'black', textAlign: 'center', textDecoration: 'none', borderBottom: '1px solid transparent' }}
-              onMouseOver={(e) => (e.currentTarget.style.borderBottom = '1px solid black')}
-              onMouseOut={(e) => (e.currentTarget.style.borderBottom = '1px solid transparent')}>
+            <a
+              href="/roommates"
+              style={{
+                color: "black",
+                textAlign: "center",
+                textDecoration: "none",
+                borderBottom: "1px solid transparent"
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.borderBottom =
+                  "1px solid black")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.borderBottom =
+                  "1px solid transparent")
+              }
+            >
               Johnny
             </a>
           </td>
@@ -36,13 +64,27 @@ const HardcodedTable = () => {
         <tr>
           <td>3</td>
           <td>
-            <a href="/roommates" style={{ color: 'black', textAlign: 'center', textDecoration: 'none', borderBottom: '1px solid transparent' }}
-              onMouseOver={(e) => (e.currentTarget.style.borderBottom = '1px solid black')}
-              onMouseOut={(e) => (e.currentTarget.style.borderBottom = '1px solid transparent')}>
-            Amy
+            <a
+              href="/roommates"
+              style={{
+                color: "black",
+                textAlign: "center",
+                textDecoration: "none",
+                borderBottom: "1px solid transparent"
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.borderBottom =
+                  "1px solid black")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.borderBottom =
+                  "1px solid transparent")
+              }
+            >
+              Amy
             </a>
           </td>
-          <td style={{ color: 'red' }}>0pts</td>
+          <td style={{ color: "red" }}>0pts</td>
         </tr>
       </tbody>
     </table>
