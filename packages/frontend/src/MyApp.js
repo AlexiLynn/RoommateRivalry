@@ -2,9 +2,7 @@ import React from "react";
 import Navbar from "./components/Navbar";
 import "./styles.css";
 import Home from "./pages/Home";
-import Roommates from "./pages/Roommates";
 import Chores from "./pages/Chores";
-import Points from "./pages/Points";
 
 function MyApp() {
   let Component;
@@ -14,12 +12,6 @@ function MyApp() {
       break;
     case "/chores":
       Component = Chores;
-      break;
-    case "/roommates":
-      Component = Roommates;
-      break;
-    case "/points":
-      Component = Points;
       break;
   }
 

@@ -8,37 +8,41 @@
   padding: 20px;
 }
 
+.Row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
 .Column {
-  margin: 10px;
+  flex: 1;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  background-color: #f8f8f8;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
 }
 
-.Column:nth-child(1) {
-  flex: 2; /* Adjusted flex value for the first column, making it wider */
-  height: 235px
-}
-
+.Column:nth-child(1),
 .Column:nth-child(2) {
-  flex: 1; /* Adjusted flex value for the second column */
-  height: 350px
+  flex: 1; /* Adjusted flex value for both columns in the first row */
+  height: 250px;
 }
 
 .Column:nth-child(3) {
-  flex: 1; /* Adjusted flex value for the third column */
-  height: 500px
+  flex: 2; /* Adjusted flex value for the third column in the first row */
+  height: 250px;
 }
 
 .Column h2 {
   color: #333;
-  margin-bottom: 5px; /* Adjust the margin-bottom for h2 */
+  margin-bottom: 5px;
   margin-top: -5px;
 }
 
 .Column p {
-  margin-top: 5px; /* Adjust the margin-top for p */
+  margin-top: 5px;
 }
 
 .ColumnContent {
@@ -52,7 +56,7 @@
 
 .TextContainer {
   flex: 2;
-  padding-left: 30px; /* Add padding for spacing between image and text */
+  padding-left: 30px;
 }
 
 .ImageContainer img {
