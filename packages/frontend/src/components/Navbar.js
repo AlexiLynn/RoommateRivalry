@@ -7,13 +7,10 @@ export default function Navbar() {
       </a>
       <ul>
         <li>
-          <a href="/roommates">Roommates</a>
-        </li>
-        <li>
           <a href="/chores">Chores</a>
         </li>
         <li>
-          <a href="/points">Points</a>
+          <a href="/">Log Out</a>
         </li>
       </ul>
     </nav>
