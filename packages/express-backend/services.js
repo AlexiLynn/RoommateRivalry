@@ -40,6 +40,10 @@ function getUsers(){
     return promise;
 }
 
+function getUsersByHousehold(home){
+    
+}
+
 function addUser(user){
     const userToAdd = new userModel(user);
     const promise = userToAdd.save();
@@ -60,6 +64,15 @@ function addChore(home){
     const promise = choreToAdd.save();
     return promise;
 }
+
+function getChoresByHousehold(home){
+
+}
+
+function getChoresByUser(home, user){
+    
+}
+
 
 
 export default {
