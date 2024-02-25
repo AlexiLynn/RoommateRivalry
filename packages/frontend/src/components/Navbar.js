@@ -2,7 +2,7 @@ import React from "react";
 export default function Navbar() {
   return (
     <nav className="nav">
-      <a href="/" className="site-title">
+      <a href="/home" className="site-title">
         Roommate Rivalry
       </a>
       <ul>

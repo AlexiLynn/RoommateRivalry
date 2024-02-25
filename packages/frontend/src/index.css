@@ -804,9 +804,9 @@ button,
 [type="button"] {
   -webkit-appearance: none;
   display: inline-block;
-  border: 1px solid #0366ee;
+  border: 1px solid rgb(143, 183, 243);
   border-radius: 4px;
-  background: #0366ee;
+  background: rgb(143, 183, 243);
   color: #ffffff;
   font-weight: 600;
   font-family:
@@ -834,7 +834,7 @@ button:hover,
 [type="reset"]:hover,
 [type="button"]:hover {
   border: 1px solid #0250bc;
-  background: #0250bc;
+  background: rgb(32, 88, 144);
   color: #ffffff;
   text-decoration: none;
 }
@@ -852,7 +852,7 @@ button:active,
 [type="button"]:focus,
 [type="button"]:active {
   border: 1px solid #0250bc;
-  background: #0250bc;
+  background: rgb(32, 88, 144);
   color: #ffffff;
   text-decoration: none;
 }
