@@ -5,24 +5,24 @@ const ChoreSchema = new mongoose.Schema(
     chore: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     completed: {
       type: Boolean,
-      required: true,
+      required: true
     },
     deadline: {
       type: Date,
-      required: true,
+      required: true
     },
     points: {
       type: Number,
-      required: true,
+      required: true
     },
     household: {
       type: mongoose.ObjectId,
       ref: "Household"
-    },
+    }
   },
   { collection: "Chore" }
 );

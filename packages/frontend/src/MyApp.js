@@ -21,7 +21,6 @@ function MyApp() {
 
   return (
     <>
-      {/* check on this after sign up page <Navbar /> */}
       {Component !== SignUp && <Navbar />}
       <Component />
     </>

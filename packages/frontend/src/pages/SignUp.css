@@ -1,23 +1,19 @@
-/* SignUp.css */
-
 .signup-container {
-    padding: 50px 300px 100px 300px;
-    background-color: rgb(230, 230, 230);
-  }
-  
-  .signup-form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .signup-form label {
-    margin-bottom: 0px;
-  }
-  
-  .signup-form input {
-    padding: 8px;
-    margin-bottom: 10px;
-    background-color: white;
-  }
-  
-  
+  padding: 100px 300px 190px 300px;
+  background-color: rgb(230, 230, 230);
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-form label {
+  margin-bottom: 0px;
+}
+
+.signup-form input {
+  padding: 8px;
+  margin-bottom: 10px;
+  background-color: white;
+}
