@@ -27,12 +27,12 @@
 .Column:nth-child(1),
 .Column:nth-child(2) {
   flex: 1; /* Adjusted flex value for both columns in the first row */
-  height: 250px;
+  height: 300px;
 }
 
 .Column:nth-child(3) {
   flex: 2; /* Adjusted flex value for the third column in the first row */
-  height: 250px;
+  height: 300px;
 }
 
 .Column h2 {

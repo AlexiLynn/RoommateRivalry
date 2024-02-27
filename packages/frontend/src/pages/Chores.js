@@ -1,4 +1,10 @@
 import React from "react";
+import ChoresLayout from "../components/Chores/ChoresLayout";
+
 export default function Chores() {
-  return <h1>Chores Information Goes Here</h1>;
+  return (
+    <div>
+      <ChoresLayout />
+    </div>
+  );
 }
