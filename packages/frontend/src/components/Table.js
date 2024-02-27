@@ -19,16 +19,12 @@ const HardcodedTable = () => {
         </tr>
         <tr>
           <td>2</td>
-          <td>
-              Johnny
-          </td>
+          <td>Johnny</td>
           <td>3pts</td>
         </tr>
         <tr>
           <td>3</td>
-          <td>
-              Amy
-          </td>
+          <td>Amy</td>
           <td style={{ color: "red" }}>0pts</td>
         </tr>
       </tbody>
