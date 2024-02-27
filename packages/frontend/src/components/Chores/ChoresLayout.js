@@ -7,7 +7,9 @@ import styles from "./ChoresStyle.module.css";
 import Chore from "./Chore";
 
 const ChoresLayout = () => {
-  const [myHouseholdChores, setMyHouseholdChores] = useState([]);
+  const [myHouseholdChores, setMyHouseholdChores] = useState(
+    []
+  );
   const [newChore, setNewChore] = useState({
     description: "",
     deadline: new Date(),
@@ -38,7 +40,10 @@ const ChoresLayout = () => {
       newChore.assignee
     );
 
-    setMyHouseholdChores((prevChores) => [...prevChores, chore]);
+    setMyHouseholdChores((prevChores) => [
+      ...prevChores,
+      chore
+    ]);
     setNewChore({
       description: "",
       deadline: new Date(),
@@ -49,7 +54,6 @@ const ChoresLayout = () => {
 
   return (
     <div className={styles.Layout}>
-      <h1>Chore Board</h1>
       <main className={styles.Main}>
         <div className={styles.Column}>
           <div className={styles.ColumnContent}>
@@ -64,7 +68,8 @@ const ChoresLayout = () => {
               <div className={styles.ChoreBox} key={index}>
                 <h3>{chore.description}</h3>
                 <div>
-                  <strong>Deadline:</strong> {chore.deadline.toLocaleDateString()}
+                  <strong>Deadline:</strong>{" "}
+                  {chore.deadline.toLocaleDateString()}
                 </div>
                 <div>
                   <strong>Points:</strong> {chore.points}

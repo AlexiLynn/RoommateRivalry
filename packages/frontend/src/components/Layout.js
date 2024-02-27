@@ -19,23 +19,7 @@ const Layout = () => {
         </div>
         <div className={styles.Column}>
           <h2>Roomies</h2>
-          <p>
-            Weekly{" "}
-            <a
-              href="/points"
-              className={styles.Link}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.borderBottom =
-                  "1px solid black")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.borderBottom =
-                  "1px solid transparent")
-              }
-            >
-              Leaderboard
-            </a>
-          </p>
+          <p>Weekly Leaderboard</p>
           <HardcodedTable />
         </div>
       </main>

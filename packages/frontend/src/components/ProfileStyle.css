@@ -1,32 +1,31 @@
 .Profile {
-    padding: 20px;
-  }
-  
-  .ProfileInfo {
-    display: flex;
-  }
-  
-  .ImageContainer {
-    max-width: 200px;
-    max-height: 200px;
-    margin-right: 10px;
-  }
-  
-  .ImageContainer img {
-    width: auto;
-    height: auto;
-  }
-  
-  .TextContainer {
-    flex-grow: 1;
-  }
-  
-  /* Additional styling for the edit mode */
-  .Profile div {
-    margin-bottom: 10px;
-  }
-  
-  .Profile button {
-    margin-top: 10px;
-  }
-  
+  padding: 20px;
+}
+
+.ProfileInfo {
+  display: flex;
+}
+
+.ImageContainer {
+  max-width: 200px;
+  max-height: 200px;
+  margin-right: 10px;
+}
+
+.ImageContainer img {
+  width: auto;
+  height: auto;
+}
+
+.TextContainer {
+  flex-grow: 1;
+}
+
+/* Additional styling for the edit mode */
+.Profile div {
+  margin-bottom: 10px;
+}
+
+.Profile button {
+  margin-top: 10px;
+}

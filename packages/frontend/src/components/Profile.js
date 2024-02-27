@@ -5,7 +5,9 @@ import "./ProfileStyle.css";
 const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [name, setName] = useState("Johnny Clean");
-  const [description, setDescription] = useState("Student @ Cal Poly");
+  const [description, setDescription] = useState(
+    "Student @ Cal Poly"
+  );
   const [image, setImage] = useState(defaultImage); //for image
 
   const handleEditClick = () => {
@@ -42,7 +44,11 @@ const Profile = () => {
         <>
           <div>
             <label htmlFor="image">Profile Image:</label>
-            <input type="file" id="image" onChange={handleImageChange} />
+            <input
+              type="file"
+              id="image"
+              onChange={handleImageChange}
+            />
           </div>
           <div>
             <label htmlFor="name">Name:</label>
@@ -68,7 +74,16 @@ const Profile = () => {
         <>
           <div className="ProfileInfo">
             <div className="ImageContainer">
-              <img src={image} alt="Profile"style={{ maxWidth: "150px", maxHeight: "150px", width: "auto", height: "auto" }}/>
+              <img
+                src={image}
+                alt="Profile"
+                style={{
+                  maxWidth: "150px",
+                  maxHeight: "150px",
+                  width: "auto",
+                  height: "auto"
+                }}
+              />
             </div>
             <div className="TextContainer">
               <h2>{name}</h2>
