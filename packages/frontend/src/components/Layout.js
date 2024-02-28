@@ -1,50 +1,26 @@
 import React from "react";
-import "./LayoutStyle.css";
-import myImage from "../images/clean.png";
+import styles from "./LayoutStyle.module.css";
 import HardcodedTable from "./Table.js";
 import HardcodedTodoList from "./ToDo";
 import Profile from "./Profile";
 
 const Layout = () => {
   return (
-    <div className="Layout">
-      <main className="Main">
-        <div className="Column">
-          <div className="ColumnContent">
-            <div className="ImageContainer">
-              <img src={myImage} alt="Clean" />
-            </div>
+    <div className={styles.Layout}>
+      <main className={styles.Main}>
+        <div className={styles.Column}>
+          <div className={styles.ColumnContent}>
             <Profile />
           </div>
         </div>
-        <div className="Column">
+        <div className={styles.Column}>
           <h2>To-Do</h2>
+          <p style={{ color: "white" }}>spacer</p>
           <HardcodedTodoList />
         </div>
-        <div className="Column">
+        <div className={styles.Column}>
           <h2>Roomies</h2>
-          <p>
-            Weekly{" "}
-            <a
-              href="/points"
-              style={{
-                color: "black",
-                textAlign: "center",
-                textDecoration: "none",
-                borderBottom: "1px solid transparent"
-              }}
-              onMouseOver={(e) =>
-                (e.currentTarget.style.borderBottom =
-                  "1px solid black")
-              }
-              onMouseOut={(e) =>
-                (e.currentTarget.style.borderBottom =
-                  "1px solid transparent")
-              }
-            >
-              Leaderboard
-            </a>
-          </p>
+          <p>Weekly Leaderboard</p>
           <HardcodedTable />
         </div>
       </main>
