@@ -8,12 +8,9 @@ mongoose.set("debug", true);
 dotenv.config();
 const uri = process.env.MONGODB_URI;
 
+
 mongoose
-  .connect(uri, {
-    dbName: `RoomieData`,
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  .connect(uri, {dbName: "RoomieData"})
   .catch((error) => console.log(error));
 
 //HOUSEHOLD SERVICES
