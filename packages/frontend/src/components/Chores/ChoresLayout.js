@@ -7,9 +7,8 @@ import styles from "./ChoresStyle.module.css";
 import Chore from "./Chore";
 
 const ChoresLayout = () => {
-  const [myHouseholdChores, setMyHouseholdChores] = useState(
-    []
-  );
+  const [myChores, setMyChores] = useState([]);
+  const [myHouseholdChores, setMyHouseholdChores] = useState([]);
   const [newChore, setNewChore] = useState({
     description: "",
     deadline: new Date(),
@@ -40,10 +39,13 @@ const ChoresLayout = () => {
       newChore.assignee
     );
 
-    setMyHouseholdChores((prevChores) => [
-      ...prevChores,
-      chore
-    ]);
+    setMyHouseholdChores((prevChores) => [...prevChores, chore]);
+
+    // Filter out chores that match the profile name and add them to My Chores
+    if (chore.assignee.toLowerCase() === "Johnny Clean".toLowerCase()) {
+      setMyChores((prevChores) => [...prevChores, chore]);
+    }
+
     setNewChore({
       description: "",
       deadline: new Date(),
@@ -56,9 +58,23 @@ const ChoresLayout = () => {
     <div className={styles.Layout}>
       <main className={styles.Main}>
         <div className={styles.Column}>
-          <div className={styles.ColumnContent}>
-            <h2>My Chores</h2>
-            {/* My Chores Table Goes Here */}
+          <h2>My Chores</h2>
+          <div className={styles.ChoresTable}>
+            {myChores.map((chore, index) => (
+              <div className={styles.ChoreBox} key={index}>
+                <h3>{chore.description}</h3>
+                <div>
+                  <strong>Deadline:</strong>{" "}
+                  {chore.deadline.toLocaleDateString()}
+                </div>
+                <div>
+                  <strong>Points:</strong> {chore.points}
+                </div>
+                <div>
+                  <strong>Assignee:</strong> {chore.assignee}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <div className={styles.Column}>
