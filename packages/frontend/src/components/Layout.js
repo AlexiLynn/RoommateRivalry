@@ -15,6 +15,7 @@ const Layout = () => {
         </div>
         <div className={styles.Column}>
           <h2>To-Do</h2>
+          <p style={{ color: "white" }}>spacer</p>
           <HardcodedTodoList />
         </div>
         <div className={styles.Column}>
