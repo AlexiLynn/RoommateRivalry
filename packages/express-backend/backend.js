@@ -1,6 +1,7 @@
 // backend.js
 import express from "express";
 import cors from "cors";
+import services from "./services.js";
 
 const app = express();
 const port = 8000;
@@ -12,11 +13,16 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.get("/chores", (req, res) => {});
-
-app.get("/roommates", (req, res) => {});
-
-app.get("/points", (req, res) => {});
+app.get("/home", async (req, res) => {
+  try {
+    const result = await services.getHousehold();
+    console.log(result);
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error ocurred in the server.");
+  }
+});
 
 app.listen(port, () => {
   console.log(
