@@ -1,0 +1,57 @@
+.signin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(230, 230, 230);
+  border-top: 60px solid rgb(143, 183, 243);
+  height: 100vh;
+}
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: -100px;
+}
+
+.profile-image {
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.signin-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signin-form input {
+  padding: 8px;
+  margin-bottom: 10px;
+  width: 400px;
+  background-color: white;
+}
+
+.signin-form label {
+  text-align: left;
+  width: 400px;
+}
+
+.signin-heading {
+  margin-left: -315px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.signup-link {
+  text-decoration: none;
+  margin-top: 0px;
+  margin-left: 350px;
+}

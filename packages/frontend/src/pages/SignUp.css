@@ -1,6 +1,7 @@
 .signup-container {
-  padding: 100px 300px 190px 300px;
+  padding: 60px 300px 190px 300px;
   background-color: rgb(230, 230, 230);
+  border-top: 60px solid rgb(143, 183, 243);
 }
 
 .signup-form {
@@ -16,4 +17,12 @@
   padding: 8px;
   margin-bottom: 10px;
   background-color: white;
+}
+
+.back-link {
+  position: absolute;
+  top: 17px;
+  left: 30px;
+  color: black;
+  text-decoration: none;
 }
