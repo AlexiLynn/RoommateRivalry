@@ -1,11 +1,14 @@
 {
   "dependencies": {
+    "dotenv": "^16.4.5",
     "eslint": "^8.56.0",
-    "prettier": "^3.2.5",
+    "mongodb": "^6.3.0",
+    "mongoose": "^8.2.0",
     "react-bootstrap": "^2.10.1",
     "react-datepicker": "^6.1.0",
     "mongodb": "^6.3.0",
     "mongoose": "^8.2.0",
+    "react-router-dom": "^6.22.1",
     "react-router-dom": "^6.22.1"
   },
   "scripts": {
@@ -19,6 +22,7 @@
     "packages/*"
   ],
   "devDependencies": {
-    "nodemon": "^3.0.3"
+    "nodemon": "^3.0.3",
+    "prettier": "^3.2.5"
   }
 }
