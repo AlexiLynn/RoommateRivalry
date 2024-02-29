@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./SignUp.css";
 
-//HAVE TO ADD BACK -> TO GO TO LOGIN PAGE
-
 const SignUp = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,6 +37,9 @@ const SignUp = () => {
 
   return (
     <div className="signup-container">
+      <a href="/" className="back-link">
+        Back
+      </a>
       <form onSubmit={handleSignUp} className="signup-form">
         <label>
           Name:
