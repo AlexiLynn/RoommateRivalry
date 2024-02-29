@@ -26,15 +26,10 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default: 0
     },
-    household: {
-      type: mongoose.ObjectId
-    },
-    chores: [
-      {
-        type: mongoose.ObjectId,
-        ref: "Chore"
-      }
-    ]
+    householdId: {
+      type: mongoose.ObjectId,
+      ref: "Household"
+    }
   },
   { collection: "User" }
 );

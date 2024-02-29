@@ -19,9 +19,13 @@ const ChoreSchema = new mongoose.Schema(
       type: Number,
       required: true
     },
-    household: {
+    householdId: {
       type: mongoose.ObjectId,
       ref: "Household"
+    },
+    userId: {
+      type: mongoose.ObjectId,
+      ref: "User"
     }
   },
   { collection: "Chore" }

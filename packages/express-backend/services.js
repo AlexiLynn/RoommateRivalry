@@ -57,9 +57,13 @@ function addChore(home) {
   return promise;
 }
 
-function getChoresByHousehold(home) {}
+function getChoresByHouseholdId(householdId) {
+  return choreModel.find({ householdId: householdId })
+}
 
-function getChoresByUser(home, user) {}
+function getChoresByUserId(userId) {
+  return choreModel.find({ userId: userId})
+}
 
 export default {
   getHousehold,

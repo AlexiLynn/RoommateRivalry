@@ -12,12 +12,6 @@ const HouseholdSchema = new mongoose.Schema(
         type: mongoose.ObjectId,
         ref: "User"
       }
-    ],
-    chores: [
-      {
-        type: mongoose.ObjectId,
-        ref: "Chore"
-      }
     ]
   },
   { collection: "Household" }
