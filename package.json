@@ -9,8 +9,6 @@
     "react-router-dom": "^6.22.1"
   },
   "scripts": {
-    "format": "npx prettier . --write",
-    "lint": "npx eslint .",
     "front": "cd packages/frontend && npm run start",
     "back": "cd packages/express-backend && npm run start",
     "back-dev": "cd packages/express-backend && npm run dev"
