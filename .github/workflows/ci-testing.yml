@@ -2,7 +2,7 @@ name: CI Testing
 
 on:
   push:
-    branches: [frontend]
+    branches: [main]
 
 jobs:
   build:
