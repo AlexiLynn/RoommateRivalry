@@ -51,7 +51,11 @@ app.get("/user/:userId", async (req, res) => {
   const id = req.params["userId"];
   try {
     result = await services.findUserById(id);
-    res.send(result);
+    if (result === undefined) {
+      res.status(404).send("Resource not found.");
+    } else {
+      res.status(204).send();
+    }
   } catch (error){
     console.log(error);
     res.status(500).send("An error ocurred in the server.");
