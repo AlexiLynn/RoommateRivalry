@@ -31,7 +31,7 @@ function addHousehold(home) {
   return promise;
 }
 
-function deleteUser(id) {
+function deleteHousehold(id) {
   return householdModel.findByIdAndDelete(id);
 }
 
