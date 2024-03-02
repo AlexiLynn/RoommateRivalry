@@ -44,7 +44,7 @@ function getUsers() {
 }
 
 function findUsersById(userId) {
-  return userModel.findById(id)
+  return userModel.findById(userId)
 }
 
 function findUsersByHouseholdId(householdId) {
