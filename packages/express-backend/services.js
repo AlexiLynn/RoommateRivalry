@@ -21,10 +21,18 @@ function getHousehold() {
   return promise;
 }
 
+function findHouseholdByID(id){
+  return householdModel.findById(id)
+}
+
 function addHousehold(home) {
   const homeToAdd = new householdModel(home);
   const promise = homeToAdd.save();
   return promise;
+}
+
+function deleteUser(id) {
+  return householdModel.findByIdAndDelete(id);
 }
 
 //USER SERVICES
@@ -35,12 +43,22 @@ function getUsers() {
   return promise;
 }
 
-function getUsersByHousehold(home) {}
+function findUsersById(id) {
+  return userModel.findById(id)
+}
+
+function findUsersByHouseholdId(id) {
+  return userModel.find({ householdId: householdId })
+}
 
 function addUser(user) {
   const userToAdd = new userModel(user);
   const promise = userToAdd.save();
   return promise;
+}
+
+function deleteUser(id) {
+  return userModel.findByIdAndDelete(id);
 }
 
 //CHORE SERVICES
@@ -57,19 +75,30 @@ function addChore(home) {
   return promise;
 }
 
-function getChoresByHouseholdId(householdId) {
+function findChoresByHouseholdId(householdId) {
   return choreModel.find({ householdId: householdId })
 }
 
-function getChoresByUserId(userId) {
+function findChoresByUserId(userId) {
   return choreModel.find({ userId: userId})
+}
+
+function deleteChore(id) {
+  return choreModel.findByIdAndDelete(id);
 }
 
 export default {
   getHousehold,
+  findHouseholdByID,
   addHousehold,
   getUsers,
+  findUsersById,
+  findUsersByHouseholdId,
   addUser,
+  deleteUser,
   getChores,
-  addChore
+  findChoresByHouseholdId,
+  findChoresByUserId,
+  addChore,
+  deleteChore
 };
