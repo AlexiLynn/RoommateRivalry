@@ -152,3 +152,4 @@ const ChoresLayout = () => {
 };
 
 export default ChoresLayout;
+
