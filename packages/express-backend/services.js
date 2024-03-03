@@ -8,9 +8,8 @@ mongoose.set("debug", true);
 dotenv.config();
 const uri = process.env.MONGODB_URI;
 
-
 mongoose
-  .connect(uri, {dbName: "RoomieData"})
+  .connect(uri, { dbName: "RoomieData" })
   .catch((error) => console.log(error));
 
 //HOUSEHOLD SERVICES
@@ -21,8 +20,8 @@ function getHousehold() {
   return promise;
 }
 
-function findHouseholdByID(householdId){
-  return householdModel.findById(householdId)
+function findHouseholdByID(householdId) {
+  return householdModel.findById(householdId);
 }
 
 function addHousehold(home) {
@@ -44,11 +43,11 @@ function getUsers() {
 }
 
 function findUsersById(userId) {
-  return userModel.findById(userId)
+  return userModel.findById(userId);
 }
 
 function findUsersByHouseholdId(householdId) {
-  return userModel.find({ householdId: householdId })
+  return userModel.find({ householdId: householdId });
 }
 
 function addUser(user) {
@@ -76,11 +75,11 @@ function addChore(chore) {
 }
 
 function findChoresByHouseholdId(householdId) {
-  return choreModel.find({ householdId: householdId })
+  return choreModel.find({ householdId: householdId });
 }
 
 function findChoresByUserId(userId) {
-  return choreModel.find({ userId: userId})
+  return choreModel.find({ userId: userId });
 }
 
 function deleteChore(choreId) {
