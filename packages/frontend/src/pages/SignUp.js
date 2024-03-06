@@ -9,30 +9,42 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [groupName, setGroupName] = useState("");
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-
-    //UNCOMMENT AT END: TO CHECK THAT ALL FIELDS ARE ENTERED
-    // if (!name || !email || !phone || !password || !confirmPassword || !groupName) {
-    //   alert("Please fill in all fields.");
-    //   return;
-    // }
 
     if (password !== confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
 
-    console.log({
-      name,
-      email,
-      phone,
-      password,
-      confirmPassword,
-      groupName
-    });
+    try {
+      const response = await fetch(
+        "http://localhost:8000/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            phone,
+            password,
+            confirmPassword,
+            groupName
+          })
+        }
+      );
 
-    window.location.pathname = "/home";
+      if (response.ok) {
+        console.log("User signed up successfully!");
+        window.location.pathname = "/home";
+      } else {
+        console.error("Sign-up failed");
+      }
+    } catch (error) {
+      console.error("An error occurred during sign-up:", error);
+    }
   };
 
   return (

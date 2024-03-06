@@ -1,27 +1,42 @@
 import React, { useState } from "react";
 import defaultImage from "../images/clean.png";
+// import signUp from "./SignUp"
 import "./SignIn.css";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
 
-    // UNCOMMENT AT END: TO CHECK THAT ALL FIELDS ARE ENTERED
-    // if (!email || !password) {
-    //   alert("Please fill in all fields.");
-    //   return;
-    // }
+    try {
+      const response = await fetch(
+        "http://localhost:8000/signin",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email,
+            password
+          })
+        }
+      );
 
-    //api call here
-    console.log({
-      email,
-      password
-    });
-
-    window.location.pathname = "/home";
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log("Sign-in successful!", responseData.token);
+        //store token in your application state or cookies?
+        window.location.pathname = "/home";
+      } else {
+        console.error("Sign-in failed");
+        alert("Incorrect login credentials!");
+      }
+    } catch (error) {
+      console.error("An error occurred during sign-in:", error);
+    }
   };
 
   return (
