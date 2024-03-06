@@ -60,6 +60,10 @@ function deleteUser(userId) {
   return userModel.findByIdAndDelete(userId);
 }
 
+function findUserByEmail(email) {
+  return userModel.find({ email: email });
+}
+
 //CHORE SERVICES
 
 function getChores() {
@@ -96,6 +100,7 @@ export default {
   findUsersByHouseholdId,
   addUser,
   deleteUser,
+  findUserByEmail,
   getChores,
   findChoresByHouseholdId,
   findChoresByUserId,

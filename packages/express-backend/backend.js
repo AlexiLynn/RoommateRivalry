@@ -2,6 +2,7 @@
 import express from "express";
 import cors from "cors";
 import services from "./services.js";
+import bcrypt from "bcrypt";
 
 const app = express();
 const port = 8000;
@@ -9,8 +10,79 @@ const port = 8000;
 app.use(cors());
 app.use(express.json());
 
+const saltRounds = 10;
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
+});
+
+app.post("/signup", async (req, res) => {
+  try {
+    const { name, email, phone, password } = req.body;
+
+    //checking if email already exists in db
+    const existingUser =
+      await services.findUserByEmail(email);
+    if (existingUser && existingUser.length > 0) {
+      return res
+        .status(400)
+        .json({
+          error:
+            "An account associated with this email already exists"
+        });
+    }
+
+    const hashedPassword = await bcrypt.hash(
+      password,
+      saltRounds
+    );
+    const newUser = {
+      name,
+      email,
+      password: hashedPassword,
+      phone
+    };
+    const savedUser = await services.addUser(newUser);
+    res
+      .status(201)
+      .json({ success: true, user: savedUser });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred in the server." });
+  }
+});
+
+app.post("/signin", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    //checking if email exists
+    const user = await services.findUserByEmail(email);
+    if (!user || user.length === 0) {
+      return res
+        .status(401)
+        .json({ error: "Invalid credentials" });
+    }
+
+    //checking password
+    const passwordMatch = await bcrypt.compare(
+      password.trim(),
+      user[0].password
+    );
+    if (!passwordMatch) {
+      return res
+        .status(401)
+        .json({ error: "Invalid credentials" });
+    }
+    res.status(200).json({ message: "Sign-in successful" });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred in the server." });
+  }
 });
 
 //Finds Household By ID
