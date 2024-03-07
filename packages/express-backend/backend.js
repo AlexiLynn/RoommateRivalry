@@ -244,13 +244,44 @@ app.get("/chore", authenticateToken, async (req, res) => {
   }
 });
 
+//GET all Chores -> used for now, until we have specific user information
+app.get("/chores", async (req, res) => {
+  const { name, job } = req.query;
+  try {
+    const result = await services.getChores();
+    res.send({ household_chores: result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in the server.");
+  }
+});
+
+// GET Chore by Household Id (Option B), used to fetch all household chores on frontend
+app.get("/chore/:householdId", async (req, res) => {
+  const householdId = req.params["householdId"];
+  try {
+    const result = await services.findChoresByHouseholdId(householdId);
+    if (result === undefined || result === null)
+      res.status(404).send("Resource not found.");
+    else {
+      res.send({ household_chores: result });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in the server.")
+  }
+});
+
 //Adds A Chore
 //  POST /chore
 app.post("/chore", authenticateToken, async (req, res) => {
   const chore = req.body;
-  const savedChore = await services.addUser(chore);
-  if (savedChore) res.status(201).send(savedChore);
-  else res.status(500).end();
+  try {
+    const savedChore = await services.addChore(chore);
+    res.status(201).json(savedChore);
+  } catch (error) {
+    res.status(500).json({ error: "An error occurred in the server." });
+  }
 });
 
 //Deletes Chore By Id

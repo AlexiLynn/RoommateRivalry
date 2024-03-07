@@ -2,14 +2,10 @@ import mongoose from "mongoose";
 
 const ChoreSchema = new mongoose.Schema(
   {
-    chore: {
+    description: {
       type: String,
       required: true,
       trim: true
-    },
-    completed: {
-      type: Boolean,
-      required: true
     },
     deadline: {
       type: Date,
@@ -18,6 +14,11 @@ const ChoreSchema = new mongoose.Schema(
     points: {
       type: Number,
       required: true
+    },
+    assignee: {
+      type: String,
+      required: true,
+      trim: true
     },
     householdId: {
       type: mongoose.ObjectId,

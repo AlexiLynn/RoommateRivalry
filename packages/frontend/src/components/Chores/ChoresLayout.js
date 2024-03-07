@@ -5,6 +5,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import styles from "./ChoresStyle.module.css";
 import Chore from "./Chore";
 
+// Constants until we have current user information
+const currHouseholdId = "testHouseholdId";
+const currUserId = "testUserId";
+const token = localStorage.getItem("token");
+const userId = localStorage.getItem("userId");
+
 const ChoresLayout = () => {
   const [myChores, setMyChores] = useState([]);
   const [myHouseholdChores, setMyHouseholdChores] = useState(
@@ -14,7 +20,9 @@ const ChoresLayout = () => {
     description: "",
     deadline: new Date(),
     points: 0,
-    assignee: ""
+    assignee: "",
+    householdId: currHouseholdId,
+    userId: userId
   });
 
   const handleInputChange = (e) => {
@@ -28,31 +36,94 @@ const ChoresLayout = () => {
   const handleDateChange = (date) => {
     setNewChore((prevChore) => ({
       ...prevChore,
-      deadline: date
+      deadline: new Date(date)
     }));
   };
 
-  const handleAddChore = () => {
+//  const handleAddChore = () => {
+//    const chore = new Chore(
+//      newChore.description,
+//      newChore.deadline,
+//      newChore.points,
+//      newChore.assignee
+//    );
+//
+//    setMyHouseholdChores((prevChores) => [
+//      ...prevChores,
+//      chore
+//    ]);
+//
+//    // Filter out chores that match the profile name and add them to My Chores
+//    if (
+//      chore.assignee.toLowerCase() ===
+//      "Johnny Clean".toLowerCase()
+//    ) {
+//      setMyChores((prevChores) => [...prevChores, chore]);
+//    }
+//
+//    setNewChore({
+//      description: "",
+//      deadline: new Date(),
+//      points: 0,
+//      assignee: ""
+//    });
+//  };
+
+  function fetchChores() {
+    return fetch("http://localhost:8000/chores")
+      .then((res) => res.json())
+      .then((json) => {
+        const parsedChores = json.household_chores.map(chore => ({
+          ...chore,
+          deadline: new Date(chore.deadline) // Parse deadline to Date object
+        }));
+        console.log(parsedChores)
+        return parsedChores;
+      })
+      .catch((error) => {
+        console.log(error);
+        return []; // Return empty array if there's an error
+      });
+  }
+
+  // Helper function to addChore(), sends POST request to add chore to backend
+  function postChore(chore) {
+    const promise = fetch("http://localhost:8000/chore", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(chore),
+    });
+    return promise;
+  }
+
+  // Adds chore to frontend after receiving successful POST response from backend
+  function addChore() {
     const chore = new Chore(
       newChore.description,
       newChore.deadline,
       newChore.points,
-      newChore.assignee
+      newChore.assignee,
+      currHouseholdId,
+      userId
     );
 
-    setMyHouseholdChores((prevChores) => [
-      ...prevChores,
-      chore
-    ]);
-
-    //will have to remove/change this once chores page is completed
-    // Filter out chores that match the profile name and add them to My Chores
-    if (
-      chore.assignee.toLowerCase() ===
-      "Johnny Clean".toLowerCase()
-    ) {
-      setMyChores((prevChores) => [...prevChores, chore]);
-    }
+    postChore(chore)
+      .then((res) => {
+        if (res.status === 201) {
+          return res.json(); // Parse the res body as JSON
+        }
+        return undefined; // If not 201, do nothing
+      })
+      .then((newChore) => {
+        if (newChore !== undefined) {
+          setMyHouseholdChores((prevChores) => [...prevChores, newChore]);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      })
 
     setNewChore({
       description: "",
@@ -60,10 +131,19 @@ const ChoresLayout = () => {
       points: 0,
       assignee: ""
     });
-  };
+  }
 
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
+// This fetches all household chores just once (the first time this page is loaded), and
+// Initializes frontend "household_chores" to reflect data in db
+//  useEffect(() => {
+//    fetchChores()
+//      .then((res) => res.json())
+//      .then((json) => {
+//        setMyHouseholdChores(json["household_chores"]);
+//        setMyChores(json["household_chores"].filter((chore) => chore.assignee.toLowerCase() === "Johnny Clean".toLowerCase()));
+//      })
+//      .catch((error) => { console.log(error); });
+//  }, [] );
 
   useEffect(() => {
     const fetchMyChores = async () => {
@@ -75,7 +155,7 @@ const ChoresLayout = () => {
             "Authorization": `Bearer ${token}`
           },
         });
-        
+
         if (response.ok) {
           const data = await response.json();
           console.log("chores listing it in the api call lol",data);
@@ -87,7 +167,7 @@ const ChoresLayout = () => {
         console.error("Error fetching chores:", error);
       }
     };
-  
+
     fetchMyChores();
   }, [token, userId]); // Include token and userId in the dependency array
 
@@ -172,7 +252,7 @@ const ChoresLayout = () => {
               onChange={handleInputChange}
             />
 
-            <button type="button" onClick={handleAddChore}>
+            <button type="button" onClick={addChore}>
               Add Chore
             </button>
           </form>
