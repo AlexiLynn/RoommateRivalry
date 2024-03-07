@@ -3,13 +3,6 @@ import React from "react";
 const HardcodedTable = () => {
   return (
     <table border="0.5">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Name</th>
-          <th>Points</th>
-        </tr>
-      </thead>
       <tbody>
         <tr>
           <td>1</td>
