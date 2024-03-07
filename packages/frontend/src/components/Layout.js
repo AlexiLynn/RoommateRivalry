@@ -5,6 +5,7 @@ import HardcodedTodoList from "./ToDo";
 import Profile from "./Profile";
 
 const Layout = () => {
+  //api call here with token to check if user is authorized to see home page
   return (
     <div className={styles.Layout}>
       <main className={styles.Main}>
