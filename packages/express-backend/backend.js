@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 
 app.post("/signup", async (req, res) => {
   try {
-    const { name, email, phone, password } = req.body;
+    const { name, email, phone, password, groupName } = req.body;
 
     //checking if email already exists in db
     const existingUser =
@@ -32,6 +32,16 @@ app.post("/signup", async (req, res) => {
         });
     }
 
+    let household = await services.findHouseholdByGroupName(groupName);
+
+    //if household does not exist, creates one
+    if (!household) {
+      household = await services.addHousehold({
+        groupname: groupName,
+        roommates: []
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(
       password,
       saltRounds
@@ -42,10 +52,15 @@ app.post("/signup", async (req, res) => {
       password: hashedPassword,
       phone
     };
+
+    //adding user
     const savedUser = await services.addUser(newUser);
-    res
-      .status(201)
-      .json({ success: true, user: savedUser });
+
+    //adding user to household
+    household.roommates.push(savedUser._id);
+    await household.save();
+
+    res.status(201).json({ success: true, user: savedUser});
   } catch (error) {
     console.log(error);
     res
@@ -54,7 +69,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-app.post("/signin", async (req, res) => {
+app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 

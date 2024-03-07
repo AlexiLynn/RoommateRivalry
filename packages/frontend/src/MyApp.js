@@ -4,13 +4,13 @@ import "./styles.css";
 import Home from "./pages/Home";
 import Chores from "./pages/Chores";
 import SignUp from "./pages/SignUp";
-import SignIn from "./pages/SignIn";
+import LogIn from "./pages/LogIn";
 
 function MyApp() {
   let Component;
   switch (window.location.pathname) {
     case "/":
-      Component = SignIn;
+      Component = LogIn;
       break;
     case "/signup":
       Component = SignUp;
@@ -25,7 +25,7 @@ function MyApp() {
 
   return (
     <>
-      {Component !== SignIn && Component !== SignUp && (
+      {Component !== LogIn && Component !== SignUp && (
         <Navbar />
       )}
       <Component />

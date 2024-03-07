@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import defaultImage from "../images/clean.png";
-// import signUp from "./SignUp"
-import "./SignIn.css";
+import "./LogIn.css";
 
-const SignIn = () => {
+const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignIn = async (e) => {
+  const handleLogIn = async (e) => {
     e.preventDefault();
 
     try {
       const response = await fetch(
-        "http://localhost:8000/signin",
+        "http://localhost:8000/login",
         {
           method: "POST",
           headers: {
@@ -40,7 +39,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className="signin-container">
+    <div className="login-container">
       <div className="image-container">
         <img
           src={defaultImage}
@@ -49,8 +48,8 @@ const SignIn = () => {
         />
       </div>
 
-      <form onSubmit={handleSignIn} className="signin-form">
-        <h3 className="signin-heading">Sign In</h3>
+      <form onSubmit={handleLogIn} className="login-form">
+        <h3 className="login-heading">Log In</h3>
         <label>
           Email:
           <input
@@ -69,7 +68,7 @@ const SignIn = () => {
           />
         </label>
 
-        <button type="submit">Sign In</button>
+        <button type="submit">Log In</button>
         <a href="/signup" className="signup-link">
           Sign Up
         </a>
@@ -78,4 +77,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default LogIn;
