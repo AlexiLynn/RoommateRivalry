@@ -162,7 +162,7 @@ app.get("/users", authenticateToken, async (req, res) => {
 
 //Finds User By ID
 //  GET /user/<userId>
-app.get("/user/:userId", async (req, res) => {
+app.get("/user/:userId", authenticateToken, async (req, res) => {
   const id = req.params["userId"];
   try {
     const result = await services.findUserById(id);
@@ -188,7 +188,7 @@ app.post("/user", authenticateToken, async (req, res) => {
 
 //Updates User
 //  PATCH /user/<userId> + body
-app.patch("/user/:userId", async (req, res) => {
+app.patch("/user/:userId", authenticateToken, async (req, res) => {
   const userId = req.params["userId"];
   const change = req.body;
   let result = await services.updateUser(userId, change);
@@ -264,7 +264,7 @@ app.post("/chore", authenticateToken, async (req, res) => {
 
 //Find a chore by choreID
 //  GET /chore/<choreId>
-app.get("/chore/:choreId", async (req, res) => {
+app.get("/chore/:choreId", authenticateToken, async (req, res) => {
   const id = req.params.choreId;
   try {
     const result = await services.findChoreById(id);
@@ -281,7 +281,7 @@ app.get("/chore/:choreId", async (req, res) => {
 
 //Updates Chore
 //  PATCH /chore/<choreId> + body
-app.patch("/chore/:choreId", async (req, res) => {
+app.patch("/chore/:choreId", authenticateToken, async (req, res) => {
   const choreId = req.params["choreId"];
   const change = req.body;
   let result = await services.updateChore(choreId, change);
