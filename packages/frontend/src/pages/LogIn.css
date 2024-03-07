@@ -1,4 +1,4 @@
-.signin-container {
+.login-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,25 +26,25 @@
   margin: 0 auto;
 }
 
-.signin-form {
+.login-form {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.signin-form input {
+.login-form input {
   padding: 8px;
   margin-bottom: 10px;
   width: 400px;
   background-color: white;
 }
 
-.signin-form label {
+.login-form label {
   text-align: left;
   width: 400px;
 }
 
-.signin-heading {
+.login-heading {
   margin-left: -315px;
   margin-top: 0px;
   margin-bottom: 0px;

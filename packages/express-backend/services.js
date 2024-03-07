@@ -24,6 +24,10 @@ function findHouseholdByID(householdId) {
   return householdModel.findById(householdId);
 }
 
+function findHouseholdByGroupName(groupName) {
+  return householdModel.findOne({ groupname: groupName });
+}
+
 function addHousehold(home) {
   const homeToAdd = new householdModel(home);
   const promise = homeToAdd.save();
@@ -93,6 +97,7 @@ function deleteChore(choreId) {
 export default {
   getHousehold,
   findHouseholdByID,
+  findHouseholdByGroupName,
   addHousehold,
   deleteHousehold,
   getUsers,
