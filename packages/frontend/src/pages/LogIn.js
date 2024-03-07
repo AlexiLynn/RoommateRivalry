@@ -27,7 +27,9 @@ const LogIn = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Sign-in successful!", responseData.token);
-        //store token in your application state or cookies?
+        //storing token in localStorage
+        localStorage.setItem("token", responseData.token);
+        localStorage.setItem("userId", responseData.userId);
         window.location.pathname = "/home";
       } else {
         console.error("Sign-in failed");
