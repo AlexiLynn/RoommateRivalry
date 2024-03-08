@@ -61,7 +61,7 @@ function addUser(user) {
 }
 
 function updateUser(userId, user){
-  return userModel.findByIdAndUpdate(userId, user)
+  return userModel.findByIdAndUpdate(userId, user);
 }
 
 function deleteUser(userId) {
@@ -88,7 +88,7 @@ function addChore(chore) {
 
 function findChoreById(choreId) {
   return choreModel.findById(choreId);
-};
+}
 
 function findChoresByHouseholdId(householdId) {
   return choreModel.find({ householdId: householdId });
