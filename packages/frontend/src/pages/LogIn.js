@@ -11,7 +11,7 @@ const LogIn = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/login",
+        "https://roommaterivalry.azurewebsites.net/login",
         {
           method: "POST",
           headers: {
