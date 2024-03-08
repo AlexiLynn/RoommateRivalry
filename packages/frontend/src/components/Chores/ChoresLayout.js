@@ -70,7 +70,7 @@ const ChoresLayout = () => {
 //  };
 
   function fetchChores() {
-    return fetch("http://localhost:8000/chores")
+    return fetch("https://roommaterivalry.azurewebsites.net/chores")
       .then((res) => res.json())
       .then((json) => {
         const parsedChores = json.household_chores.map(chore => ({
@@ -88,7 +88,7 @@ const ChoresLayout = () => {
 
   // Helper function to addChore(), sends POST request to add chore to backend
   function postChore(chore) {
-    const promise = fetch("http://localhost:8000/chore", {
+    const promise = fetch("https://roommaterivalry.azurewebsites.net/chore", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
