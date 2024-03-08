@@ -207,6 +207,26 @@ app.delete("/user/:userId", authenticateToken, async (req, res) => {
   }
 });
 
+// GET Household ID for a specific user
+app.get("/user/:userId/householdId", authenticateToken, async (req, res) => {
+  const userId = req.params.userId;
+  console.log("Received userId:", userId);
+
+  try {
+    const householdId = await services.findHouseholdIdByUserId(userId);
+
+    if (!householdId) {
+      return res.status(404).json({ error: "Household ID not found for the user." });
+    }
+
+    res.status(200).json({ householdId });
+  } catch (error) {
+    console.error("Error fetching householdId:", error);
+    res.status(500).json({ error: "An error occurred in the server." });
+  }
+  console.log("Response sent:", householdId);
+});
+
 // GET chores for a particular user
 app.get("/user/:userId/chores", authenticateToken, async (req, res) => {
   const userId = req.params.userId;
