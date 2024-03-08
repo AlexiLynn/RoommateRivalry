@@ -30,6 +30,7 @@ const LogIn = () => {
         //storing token in localStorage
         localStorage.setItem("token", responseData.token);
         localStorage.setItem("userId", responseData.userId);
+        localStorage.setItem("householdId", responseData.householdId);
         window.location.pathname = "/home";
       } else {
         console.error("Sign-in failed");
