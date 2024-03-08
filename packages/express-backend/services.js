@@ -46,7 +46,7 @@ function getUsers() {
   return promise;
 }
 
-function findUsersById(userId) {
+function findUserById(userId) {
   return userModel.findById(userId);
 }
 
@@ -58,6 +58,10 @@ function addUser(user) {
   const userToAdd = new userModel(user);
   const promise = userToAdd.save();
   return promise;
+}
+
+function updateUser(userId, user){
+  return userModel.findByIdAndUpdate(userId, user);
 }
 
 function deleteUser(userId) {
@@ -82,12 +86,20 @@ function addChore(chore) {
   return promise;
 }
 
+function findChoreById(choreId) {
+  return choreModel.findById(choreId);
+}
+
 function findChoresByHouseholdId(householdId) {
   return choreModel.find({ householdId: householdId });
 }
 
 function findChoresByUserId(userId) {
   return choreModel.find({ userId: userId });
+}
+
+function updateChore(choreId, chore){
+  return choreModel.findByIdAndUpdate(choreId, chore)
 }
 
 function deleteChore(choreId) {
@@ -115,14 +127,18 @@ export default {
   addHousehold,
   deleteHousehold,
   getUsers,
-  findUsersById,
+  findUserById,
   findUsersByHouseholdId,
   addUser,
+  updateUser,
   deleteUser,
   findUserByEmail,
   getChores,
   findChoresByHouseholdId,
+  findChoreById,
   addChore,
+  updateChore,
   deleteChore,
+  findChoresByUserId,
   findChoresByUserIdWithUserDetails
 };

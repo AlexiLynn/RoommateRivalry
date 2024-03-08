@@ -148,7 +148,7 @@ const ChoresLayout = () => {
   useEffect(() => {
     const fetchMyChores = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/user/${userId}/chores`, {
+        const response = await fetch(`https://roommaterivalry.azurewebsites.net/user/${userId}/chores`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

@@ -169,7 +169,7 @@ app.get("/user/:userId", authenticateToken, async (req, res) => {
     if (result === undefined) {
       res.status(404).send("Resource not found.");
     } else {
-      res.status(204).send();
+      res.send(result);
     }
   } catch (error) {
     console.log(error);
@@ -184,6 +184,15 @@ app.post("/user", authenticateToken, async (req, res) => {
   const savedUser = await services.addUser(user);
   if (savedUser) res.status(201).send(savedUser);
   else res.status(500).end();
+});
+
+//Updates User
+//  PATCH /user/<userId> + body
+app.patch("/user/:userId", authenticateToken, async (req, res) => {
+  const userId = req.params["userId"];
+  const change = req.body;
+  let result = await services.updateUser(userId, change);
+  res.send(result);
 });
 
 //Deletes User By Id
@@ -284,6 +293,32 @@ app.post("/chore", authenticateToken, async (req, res) => {
   }
 });
 
+//Find a chore by choreID
+//  GET /chore/<choreId>
+app.get("/chore/:choreId", authenticateToken, async (req, res) => {
+  const id = req.params.choreId;
+  try {
+    const result = await services.findChoreById(id);
+    if (result === undefined) {
+      res.status(404).send("Resource not found.");
+    } else {
+      res.send(result);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error ocurred in the server.");
+  }
+});
+
+//Updates Chore
+//  PATCH /chore/<choreId> + body
+app.patch("/chore/:choreId", authenticateToken, async (req, res) => {
+  const choreId = req.params["choreId"];
+  const change = req.body;
+  let result = await services.updateChore(choreId, change);
+  res.send(result);
+});
+
 //Deletes Chore By Id
 //  DELETE /chore/<choreId>
 app.delete("/chore/:choreId", authenticateToken, async (req, res) => {
@@ -296,8 +331,6 @@ app.delete("/chore/:choreId", authenticateToken, async (req, res) => {
   }
 });
 
-//Updates Chore
-//app.put/patch
 
 app.listen(process.env.PORT || port, () => {
   console.log("REST API is listening.");
