@@ -4,12 +4,20 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./ChoresStyle.module.css";
 import Chore from "./Chore";
+import { isAuthenticated } from "../auth";
+
+//will have to make sure the new chore that's added to database also reflects
+//on mychores and myhouseholdchores columns
 
 const ChoresLayout = () => {
+  //checks if user has access to home page
+  if (!isAuthenticated()) {
+    //redirecting to login if failed
+    window.location.pathname = "/";
+    return null;
+  }
   const [myChores, setMyChores] = useState([]);
-  const [myHouseholdChores, setMyHouseholdChores] = useState(
-    []
-  );
+  const [myHouseholdChores, setMyHouseholdChores] = useState([]);
   const [newChore, setNewChore] = useState({
     description: "",
     deadline: new Date(),
@@ -62,13 +70,16 @@ const ChoresLayout = () => {
     });
   };
 
+  //to get token, userid, householdId
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
+  const householdId = localStorage.getItem("householdId");
 
+  //to get user's chores
   useEffect(() => {
     const fetchMyChores = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/user/${userId}/chores`, {
+        const response = await fetch(`http://localhost:8000/chore?user=${userId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -78,7 +89,6 @@ const ChoresLayout = () => {
         
         if (response.ok) {
           const data = await response.json();
-          console.log("chores listing it in the api call lol",data);
           setMyChores(data);
         } else {
           console.error("Error fetching chores:", response.statusText);
@@ -89,7 +99,34 @@ const ChoresLayout = () => {
     };
   
     fetchMyChores();
-  }, [token, userId]); // Include token and userId in the dependency array
+  }, [token, userId]);
+
+  //to get entire household's chores
+  useEffect(() => {
+    const fetchMyHouseholdChores = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/chore?home=${householdId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          setMyHouseholdChores(data);
+        } else {
+          console.error("Error fetching chores:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching chores:", error);
+      }
+    };
+  
+    fetchMyHouseholdChores();
+  }, [token, householdId]);
+  
 
   return (
     <div className={styles.Layout}>
@@ -108,7 +145,7 @@ const ChoresLayout = () => {
       <strong>Points:</strong> {chore.points}
     </div>
     <div>
-      <strong>Assignee:</strong> {chore.user.name}
+      <strong>Assignee:</strong> {chore.userName}
     </div>
   </div>
 ))}
@@ -116,25 +153,25 @@ const ChoresLayout = () => {
           </div>
         </div>
         <div className={styles.Column}>
-          <h2>My Household Chores</h2>
-          <div className={styles.ChoresTable}>
-            {myHouseholdChores.map((chore, index) => (
-              <div className={styles.ChoreBox} key={index}>
-                <h3>{chore.description}</h3>
-                <div>
-                  <strong>Deadline:</strong>{" "}
-                  {chore.deadline.toLocaleDateString()}
-                </div>
-                <div>
-                  <strong>Points:</strong> {chore.points}
-                </div>
-                <div>
-                  <strong>Assignee:</strong> {chore.assignee}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+  <h2>My Household Chores</h2>
+  <div className={styles.ChoresTable}>
+    {myHouseholdChores.map((chore, index) => (
+      <div className={styles.ChoreBox} key={index}>
+            <h3>{chore.chore}</h3>
+            <div>
+              <strong>Deadline:</strong>{" "}
+              {new Date(chore.deadline).toLocaleDateString()}
+            </div>
+            <div>
+              <strong>Points:</strong> {chore.points}
+            </div>
+            <div>
+              <strong>Assignee:</strong> {chore.userName}
+            </div>
+      </div>
+    ))}
+  </div>
+</div>
         <div className={styles.Column}>
           <h2>Create New Chore</h2>
           <form>

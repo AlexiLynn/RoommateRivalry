@@ -10,7 +10,7 @@
     "react-bootstrap": "^2.10.1",
     "react-cookie": "^7.1.0",
     "react-datepicker": "^6.2.0",
-    "react-router-dom": "^6.22.1"
+    "react-router-dom": "^6.22.3"
   },
   "scripts": {
     "front": "cd packages/frontend && npm run start",

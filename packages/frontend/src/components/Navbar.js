@@ -1,5 +1,13 @@
 import React from "react";
-export default function Navbar() {
+
+const Navbar = () => {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("householdId");
+    window.location.pathname = "/";
+  };
+
   return (
     <nav className="nav">
       <a href="/home" className="site-title">
@@ -10,9 +18,30 @@ export default function Navbar() {
           <a href="/chores">Chores</a>
         </li>
         <li>
-          <a href="/">Log Out</a>
+          <button
+            onClick={handleLogout}
+            //css stuff here makes the button look like a link
+            style={{
+              background: "none",
+              border: "none",
+              color: "white",
+              cursor: "pointer",
+              padding: "0",
+              font: "inherit",
+              textDecoration: "none",
+              marginBottom: "-5px",
+            }}
+            onMouseOver={(e) => (e.target.style.textDecoration = "underline", e.target.style.color = "#0346a2")}
+            onMouseOut={(e) => (e.target.style.textDecoration = "none", e.target.style.color = "white")}
+          >
+            Log Out
+          </button>
         </li>
       </ul>
     </nav>
   );
-}
+};
+
+export default Navbar;
+
+//add the css stuff to separate file if possible

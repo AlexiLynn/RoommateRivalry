@@ -27,9 +27,12 @@ const LogIn = () => {
       if (response.ok) {
         const responseData = await response.json();
         console.log("Sign-in successful!", responseData.token);
-        //storing token in localStorage
+        
+        //storing token (and some additional stuff) in localStorage
         localStorage.setItem("token", responseData.token);
         localStorage.setItem("userId", responseData.userId);
+        localStorage.setItem("householdId", responseData.householdId);
+        
         window.location.pathname = "/home";
       } else {
         console.error("Sign-in failed");

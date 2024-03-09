@@ -31,7 +31,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-app.get("/", authenticateToken, (req, res) => {
+app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
@@ -116,7 +116,7 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign({ email: user[0].email, id: user[0]._id }, secretKey, { expiresIn: "1h" });
     console.log("TOKEN", token);
 
-    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id });
+    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id, householdId: user[0].householdId });
   } catch (error) {
     console.error(error);
     res
@@ -165,11 +165,11 @@ app.get("/users", authenticateToken, async (req, res) => {
 app.get("/user/:userId", authenticateToken, async (req, res) => {
   const id = req.params["userId"];
   try {
-    const result = await services.findUserById(id);
+    const result = await services.findUsersById(id);
     if (result === undefined) {
       res.status(404).send("Resource not found.");
     } else {
-      res.status(204).send();
+      res.status(200).send(result);
     }
   } catch (error) {
     console.log(error);
@@ -198,24 +198,8 @@ app.delete("/user/:userId", authenticateToken, async (req, res) => {
   }
 });
 
-// GET chores for a particular user
-app.get("/user/:userId/chores", authenticateToken, async (req, res) => {
-  const userId = req.params.userId;
 
-  try {
-    if (req.user.id !== userId) {
-      return res.status(403).json({ error: "Forbidden - You can only fetch your own chores." });
-    }
-
-    // Find chores by user ID with user details
-    const chores = await services.findChoresByUserIdWithUserDetails(userId);
-    res.status(200).json(chores);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "An error occurred in the server." });
-  }
-});
-
+//GET chores for user or household
 app.get("/chore", authenticateToken, async (req, res) => {
   const householdId = req.query["home"];
   const userId = req.query["user"];
@@ -271,6 +255,3 @@ app.delete("/chore/:choreId", authenticateToken, async (req, res) => {
 app.listen(process.env.PORT || port, () => {
   console.log("REST API is listening.");
 });
-
-
-//currently only generating token when login - need to do signup or reroute to login after signup?

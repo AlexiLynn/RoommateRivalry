@@ -3,9 +3,16 @@ import styles from "./LayoutStyle.module.css";
 import HardcodedTable from "./Table.js";
 import HardcodedTodoList from "./ToDo";
 import Profile from "./Profile";
+import { isAuthenticated } from "./auth";
 
 const Layout = () => {
-  //api call here with token to check if user is authorized to see home page
+  //checks if user has access to home page
+  if (!isAuthenticated()) {
+    //redirecting to login if failed
+    window.location.pathname = "/";
+    return null;
+  }
+
   return (
     <div className={styles.Layout}>
       <main className={styles.Main}>

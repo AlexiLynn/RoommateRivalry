@@ -94,20 +94,6 @@ function deleteChore(choreId) {
   return choreModel.findByIdAndDelete(choreId);
 }
 
-//to get user name with each chore
-async function findChoresByUserIdWithUserDetails(userId) {
-  const chores = await choreModel.find({ userId: userId });
-
-  const choresWithUserDetails = await Promise.all(
-    chores.map(async (chore) => {
-      const user = await userModel.findById(chore.userId, 'name');
-      return { ...chore.toObject(), user };  // Convert Mongoose document to plain object
-    })
-  );
-
-  return choresWithUserDetails;
-}
-
 export default {
   getHousehold,
   findHouseholdByID,
@@ -123,6 +109,6 @@ export default {
   getChores,
   findChoresByHouseholdId,
   addChore,
-  deleteChore,
-  findChoresByUserIdWithUserDetails
+  findChoresByUserId,
+  deleteChore
 };

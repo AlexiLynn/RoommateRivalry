@@ -26,6 +26,11 @@ const ChoreSchema = new mongoose.Schema(
     userId: {
       type: mongoose.ObjectId,
       ref: "User"
+    },
+    userName: {
+      type: String,
+      required: true,
+      trim: true
     }
   },
   { collection: "Chore" }
