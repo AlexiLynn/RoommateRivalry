@@ -6,8 +6,13 @@ import styles from "./ChoresStyle.module.css";
 
 const token = localStorage.getItem("token");
 const currUserId = localStorage.getItem("userId");
+// TODO: const currHouseholdId = localStorage.getItem("householdId");
+
+const uri = "https://roommaterivalry.azurewebsites.net"
+// const uri = "https://localhost:8000" // using for testing
 
 const ChoresLayout = () => {
+  const [myHouseholdId, setMyHouseholdId] = useState([]); // TODO: Remove once localStorage is working above
   const [myChores, setMyChores] = useState([]);
   const [myHouseholdChores, setMyHouseholdChores] = useState([]);
   const [newChore, setNewChore] = useState({
@@ -15,6 +20,7 @@ const ChoresLayout = () => {
     deadline: new Date(),
     points: 0,
     assignee: "",
+    householdId: myHouseholdId, // TODO: currHouseholdId,
     userId: currUserId,
   });
 
@@ -62,11 +68,9 @@ const ChoresLayout = () => {
 //    });
 //  };
 
-
-
   // Helper function to addChore(), sends POST request to add chore to backend
   function postChore(chore) {
-    const promise = fetch("https://roommaterivalry.azurewebsites.net/chore", {
+    const promise = fetch('${uri}/chore', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +84,7 @@ const ChoresLayout = () => {
   // Adds chore to frontend after receiving successful POST response from backend
   async function addChore() {
     try {
-      const householdId = await getHouseholdId(); // Fetch householdId from the backend
+      const householdId = await fetchMyHouseholdId()// await getHouseholdId(); // Fetch householdId from the backend
 
       if (!householdId) {
         console.error("Household ID not found for the user.");
@@ -88,13 +92,12 @@ const ChoresLayout = () => {
         return;
       }
 
-
       const choreToAdd = {
         description: newChore.description,
         deadline: newChore.deadline,
         points: newChore.points,
         assignee: newChore.assignee,
-        householdId: householdId,
+        householdId: householdId, // TODO: currHouseholdId,
         userId: currUserId,
       };
 
@@ -103,12 +106,14 @@ const ChoresLayout = () => {
       if (response.status === 201) {
         const newChore = await response.json();
         setMyHouseholdChores((prevChores) => [...prevChores, newChore]);
-        // You can update myChores here if needed
+        // TODO: Update myChores here if needed
         setNewChore({
           description: "",
           deadline: new Date(),
           points: 0,
-          assignee: ""
+          assignee: "",
+          householdId: householdId, // TODO: currHouseholdId,
+          userId: currUserId
         });
       } else {
         throw new Error("Chore not added successfully");
@@ -118,28 +123,50 @@ const ChoresLayout = () => {
     }
   }
 
-  async function getHouseholdId() {
+//  async function getHouseholdId() {
+//    try {
+//      const response = await fetch(`https://roommaterivalry.azurewebsites.net/user/${currUserId}/householdId`, {
+//        method: "GET",
+//        headers: {
+//          "Content-Type": "application/json",
+//          "Authorization": `Bearer ${token}`,
+//        },
+//      });
+//
+//      if (response.ok) {
+//        const data = await response.json();
+//        return data.householdId;
+//      } else {
+//        throw new Error("Failed to fetch householdId");
+//      }
+//    } catch (error) {
+//      console.error("Error fetching householdId:", error);
+//      throw error;
+//    }
+//  }
+
+// Not working yet :'(
+  async function fetchMyHouseholdId() {
     try {
-      const response = await fetch(`https://roommaterivalry.azurewebsites.net/user/${currUserId}/householdId`, {
+      const response = await fetch('${uri}/user/${currUserId}', {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
+          "Authorization": `Bearer ${token}`
         },
       });
 
       if (response.ok) {
-        const data = await response.json();
-        return data.householdId;
+        const user = await response.json();
+        console.log("Fetched user data: ", user);
+        setMyHouseholdId(user.householdId);
       } else {
-        throw new Error("Failed to fetch householdId");
+        console.error("Error fetching user:", response.statusText);
       }
     } catch (error) {
-      console.error("Error fetching householdId:", error);
-      throw error;
+      console.error("Error fetching user:", error);
     }
   }
-
 
 // This fetches all household chores just once (the first time this page is loaded), and
 // Initializes frontend "household_chores" to reflect data in db
@@ -156,7 +183,7 @@ const ChoresLayout = () => {
   useEffect(() => {
     const fetchMyChores = async () => {
       try {
-        const response = await fetch(`https://roommaterivalry.azurewebsites.net/user/${currUserId}/chores`, {
+        const response = await fetch(`${uri}/user/${currUserId}/chores`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
