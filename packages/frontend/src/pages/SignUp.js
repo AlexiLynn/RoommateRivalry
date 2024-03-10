@@ -19,7 +19,7 @@ const SignUp = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/signup",
+        "https://roommaterivalry.azurewebsites.net/signup",
         {
           method: "POST",
           headers: {

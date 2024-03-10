@@ -1,7 +1,16 @@
 import React from "react";
 
 const Navbar = () => {
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    //invalidating the token
+    await fetch("https://roommaterivalry.azurewebsites.net/logout", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "Content-Type": "application/json",
+      },
+    });
+
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("householdId");
@@ -44,4 +53,4 @@ const Navbar = () => {
 
 export default Navbar;
 
-//add the css stuff to separate file if possible
+//add the css stuff to separate file if possible?

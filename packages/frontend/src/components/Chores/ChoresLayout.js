@@ -79,7 +79,7 @@ const ChoresLayout = () => {
   useEffect(() => {
     const fetchMyChores = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/chore?user=${userId}`, {
+        const response = await fetch(`https://roommaterivalry.azurewebsites.net/chore?user=${userId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -105,7 +105,7 @@ const ChoresLayout = () => {
   useEffect(() => {
     const fetchMyHouseholdChores = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/chore?home=${householdId}`, {
+        const response = await fetch(`https://roommaterivalry.azurewebsites.net/chore?home=${householdId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
