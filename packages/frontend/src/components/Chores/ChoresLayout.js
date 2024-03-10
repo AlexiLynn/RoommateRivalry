@@ -75,6 +75,29 @@ const ChoresLayout = () => {
   const userId = localStorage.getItem("userId");
   const householdId = localStorage.getItem("householdId");
 
+  // Helper function for deleteChore(), sends DELETE req to backend
+  function sendDeleteChore(choreId) {
+    const promise = fetch("https://roommaterivalry.azurewebsites.net/chore/${choreId}", {
+      method: "DELETE"
+    });
+    return promise;
+  }
+
+  // Deletes chore after receiving successful DELETE response from backend
+  function deleteChore(choreId) {
+    sendDeleteChore(choreId)
+    .then((res) => {
+      if (res.status === 204) { // Successfully deleted on backend, delete on frontend by id
+        setMyHouseholdChores(myHouseholdChores.filter((chore) => chore._id !== choreId));
+      } else if (res.status === 404) {
+        console.log("Resource not found.");
+      }
+    })
+    .catch(error => {
+      console.log(error);
+    })
+  }
+
   //to get user's chores
   useEffect(() => {
     const fetchMyChores = async () => {
@@ -168,6 +191,9 @@ const ChoresLayout = () => {
             <div>
               <strong>Assignee:</strong> {chore.userName}
             </div>
+            <button type="button" onClick={deleteChore}>
+              Delete
+            </button>
       </div>
     ))}
   </div>
