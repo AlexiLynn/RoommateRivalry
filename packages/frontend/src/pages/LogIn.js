@@ -32,6 +32,7 @@ const LogIn = () => {
         localStorage.setItem("token", responseData.token);
         localStorage.setItem("userId", responseData.userId);
         localStorage.setItem("householdId", responseData.householdId);
+        localStorage.setItem("userName", responseData.userName);
         
         window.location.pathname = "/home";
       } else {
