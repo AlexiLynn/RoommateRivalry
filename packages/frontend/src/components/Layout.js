@@ -1,11 +1,13 @@
 import React from "react";
 import styles from "./LayoutStyle.module.css";
-import HardcodedTable from "./Table.js";
+import UsersTable from "./Table.js";
 import HardcodedTodoList from "./ToDo";
 import Profile from "./Profile";
 import { isAuthenticated } from "./auth";
 
 const Layout = () => {
+  const token = localStorage.getItem("token");
+  const householdId = localStorage.getItem("householdId");
   //checks if user has access to home page
   if (!isAuthenticated()) {
     //redirecting to login if failed
@@ -29,7 +31,7 @@ const Layout = () => {
         <div className={styles.Column}>
           <h2>Roomies</h2>
           <p>Weekly Leaderboard</p>
-          <HardcodedTable />
+          <UsersTable token={token} householdId={householdId} />
         </div>
       </main>
     </div>
