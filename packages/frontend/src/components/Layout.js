@@ -6,8 +6,7 @@ import Profile from "./Profile";
 
 const Layout = () => {
   const token = localStorage.getItem("token");
-  const householdId = "65e93b29d9f311f834219bed"
-  //api call here with token to check if user is authorized to see home page
+  const householdId = "65e93b29d9f311f834219bed"  //api call here with token to check if user is authorized to see home page
   return (
     <div className={styles.Layout}>
       <main className={styles.Main}>

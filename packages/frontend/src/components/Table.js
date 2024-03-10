@@ -63,7 +63,7 @@ const UsersTable = ({ token, householdId }) => {
               {' • '}
               <span>{user.phone}</span>
             </td>
-            <td style={{ color: user.points < 3 ? 'red' : 'black' }}>{user.points} pts</td>
+            <td style={{ color: user.points <= 3 ? 'red' : 'black' }}>{user.points} pts</td>
             {/* Render other user properties here as needed */}
           </tr>
         ))}
