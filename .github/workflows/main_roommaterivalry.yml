@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js version
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'
+          node-version: '20.x'
 
       - name: npm install, build, and test
         run: |
@@ -44,6 +44,8 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -53,6 +55,13 @@ jobs:
 
       - name: Unzip artifact for deployment
         run: unzip release.zip
+      
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_54B5173BB33C46B3BBF7B9B9E08DC4DE }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_60C50957228D48F39609BD0B4E696491 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C7C015A7F4E74245ADE5B58337028DB6 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -60,5 +69,5 @@ jobs:
         with:
           app-name: 'RoommateRivalry'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_DD3D6A5FCCCD4EC5AE4E3D7E3B244109 }}
           package: .
+          
