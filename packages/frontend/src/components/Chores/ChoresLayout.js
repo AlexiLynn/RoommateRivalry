@@ -16,6 +16,13 @@ const ChoresLayout = () => {
     window.location.pathname = "/";
     return null;
   }
+
+  //to get token, userid, householdId
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const householdId = localStorage.getItem("householdId");
+  const userName = localStorage.getItem("userName");
+
   const [myChores, setMyChores] = useState([]);
   const [myHouseholdChores, setMyHouseholdChores] = useState([]);
   const [newChore, setNewChore] = useState({
@@ -69,11 +76,6 @@ const ChoresLayout = () => {
       assignee: ""
     });
   };
-
-  //to get token, userid, householdId
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
-  const householdId = localStorage.getItem("householdId");
 
   //to get user's chores
   useEffect(() => {
