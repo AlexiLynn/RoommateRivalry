@@ -38,7 +38,9 @@ const SignUp = () => {
 
       if (response.ok) {
         console.log("User signed up successfully!");
-        window.location.pathname = "/home";
+
+        //leads to login after signup; for token generation
+        window.location.pathname = "/";
       } else {
         console.error("Sign-up failed");
       }

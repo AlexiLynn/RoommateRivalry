@@ -17,15 +17,22 @@ const saltRounds = 10;
 //middleware to verify JWT token
 const authenticateToken = (req, res, next) => {
   const authHeader = req.header("Authorization");
-  
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
   const token = authHeader.split(" ")[1];
 
+  if (invalidTokens.has(token)) {
+    return res.status(401).json({ error: "Token invalid" });
+  }
+
   jwt.verify(token, secretKey, (err, user) => {
-    if (err) return res.status(403).json({ error: "Forbidden" });
+    if (err) {
+      return res.status(403).json({ error: "Forbidden" });
+    }
+
     req.user = user;
     next();
   });
@@ -113,10 +120,10 @@ app.post("/login", async (req, res) => {
     }
 
     //generating JWT token
-    const token = jwt.sign({ email: user[0].email, id: user[0]._id }, secretKey, { expiresIn: "1h" });
+    const token = jwt.sign({ email: user[0].email, id: user[0]._id }, secretKey, { expiresIn: "15m" });
     console.log("TOKEN", token);
 
-    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id });
+    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id, householdId: user[0].householdId });
   } catch (error) {
     console.error(error);
     res
@@ -165,11 +172,11 @@ app.get("/users", authenticateToken, async (req, res) => {
 app.get("/user/:userId", authenticateToken, async (req, res) => {
   const id = req.params["userId"];
   try {
-    const result = await services.findUserById(id);
+    const result = await services.findUsersById(id);
     if (result === undefined) {
       res.status(404).send("Resource not found.");
     } else {
-      res.send(result);
+      res.status(200).send(result);
     }
   } catch (error) {
     console.log(error);
@@ -207,49 +214,40 @@ app.delete("/user/:userId", authenticateToken, async (req, res) => {
   }
 });
 
-// GET chores for a particular user
-app.get("/user/:userId/chores", authenticateToken, async (req, res) => {
-  const userId = req.params.userId;
 
-  try {
-    if (req.user.id !== userId) {
-      return res.status(403).json({ error: "Forbidden - You can only fetch your own chores." });
-    }
-
-    // Find chores by user ID with user details
-    const chores = await services.findChoresByUserIdWithUserDetails(userId);
-    res.status(200).json(chores);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "An error occurred in the server." });
-  }
-});
-
+//GET chores for user or household
 app.get("/chore", authenticateToken, async (req, res) => {
   const householdId = req.query["home"];
   const userId = req.query["user"];
+
+  //checks if user is accessing its own chores info
+  const authenticatedUserId = req.user.id;
+  if (userId && authenticatedUserId !== userId) {
+    return res.status(403).send("Access denied. You can only retrieve your own chores.");
+  }
+
   try {
-    if ((householdId != undefined) & (userId == undefined)) {
-      const result =
-        await services.findChoresByHouseholdId(householdId);
+    //checks if user is accessing their own household chores info
+    if (householdId != undefined) {
+      const household = await services.findHouseholdByID(householdId);
+      if (!household || !household.roommates.includes(authenticatedUserId)) {
+        return res.status(403).send("Access denied. You are not a member of this household.");
+      }
+
+      const result = await services.findChoresByHouseholdId(householdId);
       res.send(result);
-    } else if (
-      (householdId == undefined) &
-      (userId != undefined)
-    ) {
+    } else if (userId != undefined) {
       const result = await services.findChoresByUserId(userId);
       res.send(result);
     } else {
       console.log(
-        new Error(
-          "Usage = /chore?home=<householdId> or ?user=<userId>"
-        )
+        new Error("Usage = /chore?home=<householdId> or ?user=<userId>")
       );
       res.status(400).send("Improper Usage");
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error ocurred in the server.");
+    res.status(500).send("An error occurred in the server.");
   }
 });
 
@@ -300,10 +298,16 @@ app.delete("/chore/:choreId", authenticateToken, async (req, res) => {
   }
 });
 
+const invalidTokens = new Set();
+
+//endpoint to invalidate the token on logout
+app.post("/logout", authenticateToken, (req, res) => {
+  const token = req.header("Authorization").split(" ")[1];
+  invalidTokens.add(token);
+  res.status(200).json({ message: "Token invalidated" });
+});
+
 
 app.listen(process.env.PORT || port, () => {
   console.log("REST API is listening.");
 });
-
-
-//currently only generating token when login - need to do signup or reroute to login after signup?
