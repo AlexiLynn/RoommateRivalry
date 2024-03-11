@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./ChoresStyle.module.css";
+import Chore from "./Chore";
 import { isAuthenticated } from "../auth";
 
 //will have to make sure the new chore that's added to database also reflects
@@ -38,36 +39,6 @@ const ChoresLayout = () => {
       deadline: date
     }));
   };
-
-//  const handleAddChore = () => {
-//    const chore = new Chore(
-//      newChore.description,
-//      newChore.deadline,
-//      newChore.points,
-//      newChore.assignee
-//    );
-//
-//    setMyHouseholdChores((prevChores) => [
-//      ...prevChores,
-//      chore
-//    ]);
-//
-//    //will have to remove/change this once chores page is completed
-//    // Filter out chores that match the profile name and add them to My Chores
-//    if (
-//      chore.assignee.toLowerCase() ===
-//      "Johnny Clean".toLowerCase()
-//    ) {
-//      setMyChores((prevChores) => [...prevChores, chore]);
-//    }
-//
-//    setNewChore({
-//      description: "",
-//      deadline: new Date(),
-//      points: 0,
-//      assignee: ""
-//    });
-//  };
 
   //to get token, userid, householdId
   const token = localStorage.getItem("token");
@@ -277,6 +248,7 @@ const ChoresLayout = () => {
             />
 
             <button type="button" onClick={addChore}>
+            className={styles.AddButton}>
               Add Chore
             </button>
           </form>

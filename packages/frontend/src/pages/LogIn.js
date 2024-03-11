@@ -33,7 +33,7 @@ const LogIn = () => {
         localStorage.setItem("userId", responseData.userId);
         localStorage.setItem("householdId", responseData.householdId);
         localStorage.setItem("userName", responseData.name);
-        
+
         window.location.pathname = "/home";
       } else {
         console.error("Sign-in failed");
