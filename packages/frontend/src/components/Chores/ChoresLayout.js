@@ -4,10 +4,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./ChoresStyle.module.css";
 import { isAuthenticated } from "../auth";
-import mongoose from "mongoose";
-
-//will have to make sure the new chore that's added to database also reflects
-//on mychores and myhouseholdchores columns
 
 const ChoresLayout = () => {
   //checks if user has access to home page
@@ -21,19 +17,18 @@ const ChoresLayout = () => {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
   const householdId = localStorage.getItem("householdId");
-  const userName = localStorage.getItem("userName");
 
   // To toggle btwn local and deployed state
   const uri = "https://roommaterivalry.azurewebsites.net"
   // const uri = "http://localhost:8000"
   
+  const [user, setUser] = useState([]);
   const [myChores, setMyChores] = useState([]);
   const [myHouseholdChores, setMyHouseholdChores] = useState([]);
   const [newChore, setNewChore] = useState({
     description: "",
     deadline: new Date(),
-    points: 0,
-    assignee: userName
+    points: 0
   });
 
   const handleInputChange = (e) => {
@@ -51,52 +46,18 @@ const ChoresLayout = () => {
     }));
   };
 
-//  const handleAddChore = () => {
-//    const chore = new Chore(
-//      newChore.description,
-//      newChore.deadline,
-//      newChore.points,
-//      newChore.assignee
-//    );
-//
-//    setMyHouseholdChores((prevChores) => [
-//      ...prevChores,
-//      chore
-//    ]);
-//
-//    //will have to remove/change this once chores page is completed
-//    // Filter out chores that match the profile name and add them to My Chores
-//    if (
-//      chore.assignee.toLowerCase() ===
-//      "Johnny Clean".toLowerCase()
-//    ) {
-//      setMyChores((prevChores) => [...prevChores, chore]);
-//    }
-//
-//    setNewChore({
-//      description: "",
-//      deadline: new Date(),
-//      points: 0,
-//      assignee: ""
-//    });
-//  };
-
   const addChore = async () => {
+    const choreToAdd = {
+      chore: newChore.description,
+      completed: false,
+      deadline: newChore.deadline,
+      points: newChore.points,
+      householdId: user.householdId,
+      userId: userId,
+      userName: user.name
+    };
+
     try {
-      const deadlineTimestamp = newChore.deadline.getTime();
-      const userIdObject = new mongoose.Types.ObjectId(userId);
-      const householdIdObject = new mongoose.Types.ObjectId(householdId);
-
-      const choreToAdd = {
-        chore: newChore.description,
-        completed: false,
-        deadline: deadlineTimestamp,
-        points: newChore.points,
-        householdId: householdIdObject,
-        userId: userIdObject,
-        userName: userName
-      };
-
       const response = await fetch(`${uri}/chore`, {
         method: "POST",
         headers: {
@@ -105,22 +66,29 @@ const ChoresLayout = () => {
         },
         body: JSON.stringify(choreToAdd),
       });
+      console.log("POST response: ", response);
 
       if (response.ok) {
-        // const postedChore = await response.json();
-        setMyHouseholdChores((prevChores) => [...prevChores, newChore]);
-        setMyChores((prevChores) => [...prevChores, newChore]);
-
+        setMyHouseholdChores((prevChores) => [...prevChores, choreToAdd]);
+        setMyChores((prevChores) => [...prevChores, choreToAdd]);
         setNewChore({
           description: "",
           deadline: new Date(),
-          points: 0,
-          assignee: userName
+          points: 0
         });
       } else {
         throw new Error("Chore not added successfully");
       }
     } catch (error) {
+      // TODO: Remove these lines once the front to backend is working - this ONLY updates the frontend for demo purposes
+      setMyHouseholdChores((prevChores) => [...prevChores, choreToAdd]);
+      setMyChores((prevChores) => [...prevChores, choreToAdd]);
+      setNewChore({
+        description: "",
+        deadline: new Date(),
+        points: 0
+      });
+
       console.error("Error adding chore:", error);
     }
   };
@@ -149,6 +117,36 @@ const ChoresLayout = () => {
         console.error("Error deleting chore:", error);
       });
   }
+
+  // To get user information
+  useEffect(() => {
+    const fetchUserById = async () => {
+      try {
+        const response = await fetch(`${uri}/user/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch user data');
+        }
+ 
+        const userData = await response.json();
+ 
+        setUser({
+          name: userData.name || "No name provided",
+          householdId: userData.householdId || "No household id provided"
+        });
+        
+      } catch (error) {
+        console.error('Error fetching user:', error.message);
+      }
+    };
+    fetchUserById();
+  }, [userId, token]);
 
   //to get user's chores
   useEffect(() => {

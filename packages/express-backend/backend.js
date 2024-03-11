@@ -36,7 +36,6 @@ const authenticateToken = (req, res, next) => {
     req.user = user;
     next();
   });
-  next();
 };
 
 app.get("/", authenticateToken, (req, res) => {
@@ -124,7 +123,7 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign({ email: user[0].email, id: user[0]._id }, secretKey, { expiresIn: "15m" });
     console.log("TOKEN", token);
 
-    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id, householdId: user[0].householdId });
+    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id, householdId: user[0].householdId, userName: user[0].name });
   } catch (error) {
     console.error(error);
     res
@@ -263,14 +262,17 @@ app.get("/chore", authenticateToken, async (req, res) => {
 
 app.post("/chore", authenticateToken, async (req, res) => {
   try {
-    const { chore, completed, deadline, points, householdId, userId, userName } = req.body; // Extract user data from request body
+    const { chore, completed, deadline, points, householdId, userId, userName } = req.body;
+    const deadlineTimestamp = deadline.getTime();
+    const userIdObject = new mongoose.Types.ObjectId(userId);
+    const householdIdObject = new mongoose.Types.ObjectId(householdId);
     const newChore = {
       chore,
       completed,
-      deadline,
+      deadline: deadlineTimestamp,
       points,
-      householdId,
-      userId,
+      householdId: householdIdObject,
+      userId: userIdObject,
       userName
     };
 
