@@ -48,7 +48,7 @@ const UsersTable = ({ token, householdId }) => {
     <table>
       <thead>
         <tr>
-          <th>Roomate</th>
+          <th>Roommate</th>
           <th>Points</th>
           {/* Add other headings here as needed */}
         </tr>
