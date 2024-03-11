@@ -81,3 +81,9 @@ form {
   flex-direction: column;
   width: 100%;
 }
+
+.DeleteButton {
+  background-color: red;
+  color: white;
+  /* Add any additional styling you want */
+}

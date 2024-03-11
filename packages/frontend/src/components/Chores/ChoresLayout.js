@@ -75,6 +75,32 @@ const ChoresLayout = () => {
   const userId = localStorage.getItem("userId");
   const householdId = localStorage.getItem("householdId");
 
+
+  // Deletes chore after receiving successful DELETE response from backend
+  function deleteChore(choreId) {
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      }
+    };
+    fetch(`https://roommaterivalry.azurewebsites.net/chore/${choreId}`, requestOptions)
+      .then((res) => {
+        if (res.status === 204) { // Successfully deleted on backend, delete on frontend by id
+          setMyChores((prevChores) => prevChores.filter((chore) => chore._id !== choreId));
+          setMyHouseholdChores((prevChores) => prevChores.filter((chore) => chore._id !== choreId));
+        } else if (res.status === 404) {
+          console.log("Resource not found.");
+        } else {
+          console.log("Error deleting chore:", res.statusText);
+        }
+      })
+      .catch(error => {
+        console.error("Error deleting chore:", error);
+      });
+  }
+
   //to get user's chores
   useEffect(() => {
     const fetchMyChores = async () => {
@@ -135,21 +161,26 @@ const ChoresLayout = () => {
           <h2>My Chores</h2>
           <div className={styles.ChoresTable}>
           {myChores.map((chore, index) => (
-  <div className={styles.ChoreBox} key={index}>
-    <h3>{chore.chore}</h3>
-    <div>
-      <strong>Deadline:</strong>{" "}
-      {new Date(chore.deadline).toLocaleDateString()}
-    </div>
-    <div>
-      <strong>Points:</strong> {chore.points}
-    </div>
-    <div>
-      <strong>Assignee:</strong> {chore.userName}
-    </div>
-  </div>
-))}
-
+            <div className={styles.ChoreBox} key={index}>
+              <h3>{chore.chore}</h3>
+              <div>
+                <strong>Deadline:</strong>{" "}
+                {new Date(chore.deadline).toLocaleDateString()}
+              </div>
+              <div>
+                <strong>Points:</strong> {chore.points}
+              </div>
+              <div>
+                <strong>Assignee:</strong> {chore.userName}
+              </div>
+              <button
+                type="button"
+                onClick={() => deleteChore(chore._id)}
+                className={styles.DeleteButton}>
+                Delete
+              </button>
+            </div>
+            ))}
           </div>
         </div>
         <div className={styles.Column}>
@@ -168,6 +199,12 @@ const ChoresLayout = () => {
             <div>
               <strong>Assignee:</strong> {chore.userName}
             </div>
+            <button
+              type="button"
+              onClick={() => deleteChore(chore._id)}
+              className={styles.DeleteButton}>
+              Delete
+            </button>
       </div>
     ))}
   </div>
