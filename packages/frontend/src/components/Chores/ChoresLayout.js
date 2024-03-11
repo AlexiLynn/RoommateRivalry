@@ -155,7 +155,7 @@ const ChoresLayout = () => {
   
 
   return (
-    <div className={styles.Layout}>
+    <div className={`${styles.Layout} ${styles.ChoresLayout}`}>
       <main className={styles.Main}>
         <div className={styles.Column}>
           <h2>My Chores</h2>
@@ -208,7 +208,7 @@ const ChoresLayout = () => {
       </div>
     ))}
   </div>
-</div>
+  </div>
         <div className={styles.Column}>
           <h2>Create New Chore</h2>
           <form>
@@ -246,7 +246,8 @@ const ChoresLayout = () => {
               onChange={handleInputChange}
             />
 
-            <button type="button" onClick={handleAddChore}>
+            <button type="button" onClick={handleAddChore}
+            className={styles.AddButton}>
               Add Chore
             </button>
           </form>
