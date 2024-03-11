@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./LayoutStyle.module.css";
 import UsersTable from "./Table.js";
-import HardcodedTodoList from "./ToDo";
+import TodoList from "./ToDo";
 import Profile from "./Profile";
 import { isAuthenticated } from "./auth";
 
@@ -26,7 +26,7 @@ const Layout = () => {
         <div className={styles.Column}>
           <h2>To-Do</h2>
           <p style={{ color: "white" }}>spacer</p>
-          <HardcodedTodoList />
+          <TodoList />
         </div>
         <div className={styles.Column}>
           <h2>Roomies</h2>

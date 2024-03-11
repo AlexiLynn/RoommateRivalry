@@ -172,7 +172,7 @@ app.get("/users", authenticateToken, async (req, res) => {
 app.get("/user/:userId", authenticateToken, async (req, res) => {
   const id = req.params["userId"];
   try {
-    const result = await services.findUsersById(id);
+    const result = await services.findUserById(id);
     if (result === undefined) {
       res.status(404).send("Resource not found.");
     } else {
@@ -297,6 +297,42 @@ app.delete("/chore/:choreId", authenticateToken, async (req, res) => {
     res.status(204).send();
   }
 });
+
+// GET chore info, update user's points, and delete chore
+// GET /complete-chore/<choreId>
+app.get("/complete-chore/:choreId", authenticateToken, async (req, res) => {
+  const choreId = req.params["choreId"];
+  const authenticatedUserId = req.user.id;
+
+  try {
+    //get chore info
+    const chore = await services.findChoreById(choreId);
+
+    //check if chore exists
+    if (!chore) {
+      return res.status(404).send("Chore not found.");
+    }
+
+    //check if the user is authorized to complete this chore
+    if (chore.userId.toString() !== authenticatedUserId) {
+      return res.status(403).send("Access denied. You can only access/update your own chores.");
+    }
+
+    //updating user points
+    const user = await services.findUserById(authenticatedUserId);
+    user.points += chore.points;
+    await user.save();
+
+    //deleting chore from db
+    await services.deleteChore(choreId);
+
+    res.status(200).json({ message: "Chore completed successfully", pointsEarned: chore.points });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in the server.");
+  }
+});
+
 
 const invalidTokens = new Set();
 

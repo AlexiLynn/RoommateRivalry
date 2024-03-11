@@ -1,57 +1,88 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-const HardcodedTodoList = () => {
-  const [todos, setTodos] = useState([
-    { id: 1, text: "Take Out The Trash", completed: false },
-    { id: 2, text: "Vacuum", completed: false },
-    { id: 3, text: "Wash Dishes", completed: true }
-  ]);
+const TodoList = () => {
+  const [myChores, setMyChores] = useState([]);
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
 
-  const handleToggleComplete = (id) => {
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === id
-          ? { ...todo, completed: !todo.completed }
-          : todo
-      )
-    );
+  useEffect(() => {
+    const fetchMyChores = async () => {
+      try {
+        const response = await fetch(`https://roommaterivalry.azurewebsites.net/chore?user=${userId}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setMyChores(data);
+        } else {
+          console.error("Error fetching chores:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Error fetching chores:", error);
+      }
+    };
+
+    fetchMyChores();
+  }, [token, userId]);
+
+  //update user points, delete chore
+  const handleToggleComplete = async (_id) => {
+    try {
+      const response = await fetch(`https://roommaterivalry.azurewebsites.net/complete-chore/${_id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        setMyChores((prevChores) =>
+          prevChores.map((chore) =>
+            chore._id === _id ? { ...chore, completed: !chore.completed } : chore
+          )
+        );
+      } else {
+        console.error("Error completing chore:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error completing chore:", error);
+    }
   };
 
   return (
     <div>
-      <ul style={{ listStyleType: "none", padding: 0 }}>
-        {todos.map((todo) => (
-          <li
-            key={todo.id}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              marginBottom: "12px",
-              padding: "10px",
-              border: "1px solid #ccc",
-              borderRadius: "8px"
-            }}
-          >
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => handleToggleComplete(todo.id)}
-              style={{ marginRight: "8px" }}
-            />
-            <span
-              style={{
-                textDecoration: todo.completed
-                  ? "line-through"
-                  : "none"
-              }}
-            >
-              {todo.text}
-            </span>
-          </li>
-        ))}
-      </ul>
+      <table style={{ width: "100%" }}>
+        <thead>
+          <tr>
+            <th>Chore</th>
+            <th>Points</th>
+            <th>Done</th>
+          </tr>
+        </thead>
+        <tbody>
+          {myChores.map((chore) => (
+            <tr key={chore._id} style={{ textDecoration: chore.completed ? "line-through" : "none" }}>
+              <td>{chore.chore}</td>
+              <td>{chore.points}</td>
+              <td>
+                <input
+                  type="checkbox"
+                  checked={chore.completed}
+                  onChange={() => handleToggleComplete(chore._id)}
+                />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default HardcodedTodoList;
+export default TodoList;
