@@ -3,13 +3,14 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./ChoresStyle.module.css";
-import Chore from "./Chore";
 import { isAuthenticated } from "../auth";
+import mongoose from "mongoose";
 
 //will have to make sure the new chore that's added to database also reflects
 //on mychores and myhouseholdchores columns
 
 const ChoresLayout = () => {
+
   //checks if user has access to home page
   if (!isAuthenticated()) {
     //redirecting to login if failed
@@ -48,13 +49,16 @@ const ChoresLayout = () => {
 
   const addChore = async () => {
     try {
+      const userIdObject = new mongoose.Types.ObjectId(userId);
+      const householdIdObject = new mongoose.Types.ObjectId(householdId);
+
       const choreToAdd = {
         chore: newChore.description,
         completed: false,
         deadline: newChore.deadline,
         points: newChore.points,
-        userId: userId,
-        householdId: householdId,
+        userId: userIdObject,
+        householdId: householdIdObject,
         userName: userName
       };
 
@@ -165,7 +169,7 @@ const ChoresLayout = () => {
   
 
   return (
-    <div className={styles.Layout}>
+    <div className={'${styles.Layout} ${styles.ChoresLayout}'}>
       <main className={styles.Main}>
         <div className={styles.Column}>
           <h2>My Chores</h2>
@@ -247,7 +251,7 @@ const ChoresLayout = () => {
               onChange={handleInputChange}
             />
 
-            <button type="button" onClick={addChore}>
+            <button type="button" onClick={addChore}
             className={styles.AddButton}>
               Add Chore
             </button>
