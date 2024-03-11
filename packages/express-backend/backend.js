@@ -36,6 +36,7 @@ const authenticateToken = (req, res, next) => {
     req.user = user;
     next();
   });
+  next();
 };
 
 app.get("/", authenticateToken, (req, res) => {
@@ -253,11 +254,48 @@ app.get("/chore", authenticateToken, async (req, res) => {
 
 //Adds A Chore
 //  POST /chore
+//app.post("/chore", async (req, res) => {
+//  const chore = req.body;
+//  const savedChore = await services.addChore(chore);
+//  if (savedChore) res.status(201).send(savedChore);
+//  else res.status(500).end();
+//});
+
 app.post("/chore", authenticateToken, async (req, res) => {
-  const chore = req.body;
-  const savedChore = await services.addUser(chore);
-  if (savedChore) res.status(201).send(savedChore);
-  else res.status(500).end();
+  try {
+    const { chore, completed, deadline, points, householdId, userId, userName } = req.body; // Extract user data from request body
+    const newChore = {
+      chore,
+      completed,
+      deadline,
+      points,
+      householdId,
+      userId,
+      userName
+    };
+
+    console.log("newChore: ", newChore);
+
+    const savedChore = await services.addChore(newChore);
+
+    if (savedChore) {
+      res.status(201).json({
+        success: true,
+        data: savedChore
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: "Failed to save chore"
+      });
+    }
+  } catch (error) {
+    console.error("Error adding chore:", error);
+    res.status(500).json({
+      success: false,
+      error: "Internal Server Error"
+    });
+  }
 });
 
 //Find a chore by choreID

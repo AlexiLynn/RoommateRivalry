@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import styles from "./ChoresStyle.module.css";
-import Chore from "./Chore";
 import { isAuthenticated } from "../auth";
+import mongoose from "mongoose";
 
 //will have to make sure the new chore that's added to database also reflects
 //on mychores and myhouseholdchores columns
@@ -16,13 +16,24 @@ const ChoresLayout = () => {
     window.location.pathname = "/";
     return null;
   }
+
+  //to get token, userId, householdId, userName
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  const householdId = localStorage.getItem("householdId");
+  const userName = localStorage.getItem("userName");
+
+  // To toggle btwn local and deployed state
+  const uri = "https://roommaterivalry.azurewebsites.net"
+  // const uri = "http://localhost:8000"
+  
   const [myChores, setMyChores] = useState([]);
   const [myHouseholdChores, setMyHouseholdChores] = useState([]);
   const [newChore, setNewChore] = useState({
     description: "",
     deadline: new Date(),
     points: 0,
-    assignee: ""
+    assignee: userName
   });
 
   const handleInputChange = (e) => {
@@ -40,41 +51,79 @@ const ChoresLayout = () => {
     }));
   };
 
-  const handleAddChore = () => {
-    const chore = new Chore(
-      newChore.description,
-      newChore.deadline,
-      newChore.points,
-      newChore.assignee
-    );
+//  const handleAddChore = () => {
+//    const chore = new Chore(
+//      newChore.description,
+//      newChore.deadline,
+//      newChore.points,
+//      newChore.assignee
+//    );
+//
+//    setMyHouseholdChores((prevChores) => [
+//      ...prevChores,
+//      chore
+//    ]);
+//
+//    //will have to remove/change this once chores page is completed
+//    // Filter out chores that match the profile name and add them to My Chores
+//    if (
+//      chore.assignee.toLowerCase() ===
+//      "Johnny Clean".toLowerCase()
+//    ) {
+//      setMyChores((prevChores) => [...prevChores, chore]);
+//    }
+//
+//    setNewChore({
+//      description: "",
+//      deadline: new Date(),
+//      points: 0,
+//      assignee: ""
+//    });
+//  };
 
-    setMyHouseholdChores((prevChores) => [
-      ...prevChores,
-      chore
-    ]);
+  const addChore = async () => {
+    try {
+      const deadlineTimestamp = newChore.deadline.getTime();
+      const userIdObject = new mongoose.Types.ObjectId(userId);
+      const householdIdObject = new mongoose.Types.ObjectId(householdId);
 
-    //will have to remove/change this once chores page is completed
-    // Filter out chores that match the profile name and add them to My Chores
-    if (
-      chore.assignee.toLowerCase() ===
-      "Johnny Clean".toLowerCase()
-    ) {
-      setMyChores((prevChores) => [...prevChores, chore]);
+      const choreToAdd = {
+        chore: newChore.description,
+        completed: false,
+        deadline: deadlineTimestamp,
+        points: newChore.points,
+        householdId: householdIdObject,
+        userId: userIdObject,
+        userName: userName
+      };
+
+      const response = await fetch(`${uri}/chore`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify(choreToAdd),
+      });
+
+      if (response.ok) {
+        // const postedChore = await response.json();
+        setMyHouseholdChores((prevChores) => [...prevChores, newChore]);
+        setMyChores((prevChores) => [...prevChores, newChore]);
+
+        setNewChore({
+          description: "",
+          deadline: new Date(),
+          points: 0,
+          assignee: userName
+        });
+      } else {
+        throw new Error("Chore not added successfully");
+      }
+    } catch (error) {
+      console.error("Error adding chore:", error);
     }
-
-    setNewChore({
-      description: "",
-      deadline: new Date(),
-      points: 0,
-      assignee: ""
-    });
   };
-
-  //to get token, userid, householdId
-  const token = localStorage.getItem("token");
-  const userId = localStorage.getItem("userId");
-  const householdId = localStorage.getItem("householdId");
-
 
   // Deletes chore after receiving successful DELETE response from backend
   function deleteChore(choreId) {
@@ -85,7 +134,7 @@ const ChoresLayout = () => {
         "Authorization": `Bearer ${token}`
       }
     };
-    fetch(`https://roommaterivalry.azurewebsites.net/chore/${choreId}`, requestOptions)
+    fetch(`${uri}/chore/${choreId}`, requestOptions)
       .then((res) => {
         if (res.status === 204) { // Successfully deleted on backend, delete on frontend by id
           setMyChores((prevChores) => prevChores.filter((chore) => chore._id !== choreId));
@@ -105,7 +154,7 @@ const ChoresLayout = () => {
   useEffect(() => {
     const fetchMyChores = async () => {
       try {
-        const response = await fetch(`https://roommaterivalry.azurewebsites.net/chore?user=${userId}`, {
+        const response = await fetch(`${uri}/chore?user=${userId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -131,7 +180,7 @@ const ChoresLayout = () => {
   useEffect(() => {
     const fetchMyHouseholdChores = async () => {
       try {
-        const response = await fetch(`https://roommaterivalry.azurewebsites.net/chore?home=${householdId}`, {
+        const response = await fetch(`${uri}/chore?home=${householdId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -155,7 +204,7 @@ const ChoresLayout = () => {
   
 
   return (
-    <div className={`${styles.Layout} ${styles.ChoresLayout}`}>
+    <div className={'${styles.Layout} ${styles.ChoresLayout}'}>
       <main className={styles.Main}>
         <div className={styles.Column}>
           <h2>My Chores</h2>
@@ -208,7 +257,7 @@ const ChoresLayout = () => {
       </div>
     ))}
   </div>
-  </div>
+</div>
         <div className={styles.Column}>
           <h2>Create New Chore</h2>
           <form>
@@ -237,16 +286,7 @@ const ChoresLayout = () => {
               onChange={handleInputChange}
             />
 
-            <label htmlFor="assignee">Assignee:</label>
-            <input
-              type="text"
-              id="assignee"
-              name="assignee"
-              value={newChore.assignee}
-              onChange={handleInputChange}
-            />
-
-            <button type="button" onClick={handleAddChore}
+            <button type="button" onClick={addChore}
             className={styles.AddButton}>
               Add Chore
             </button>
