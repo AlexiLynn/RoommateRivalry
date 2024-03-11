@@ -49,13 +49,14 @@ const ChoresLayout = () => {
 
   const addChore = async () => {
     try {
+      const deadlineTimestamp = newChore.deadline.getTime();
       const userIdObject = new mongoose.Types.ObjectId(userId);
       const householdIdObject = new mongoose.Types.ObjectId(householdId);
 
       const choreToAdd = {
         chore: newChore.description,
         completed: false,
-        deadline: newChore.deadline,
+        deadline: deadlineTimestamp,
         points: newChore.points,
         userId: userIdObject,
         householdId: householdIdObject,
