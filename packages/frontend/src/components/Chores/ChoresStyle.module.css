@@ -82,8 +82,14 @@ form {
   width: 100%;
 }
 
-.DeleteButton {
-  background-color: red;
+.ChoresLayout .DeleteButton {
+  background-color: #ee725f;
+  color: white;
+  /* Add any additional styling you want */
+}
+
+.ChoresLayout .AddButton {
+  background-color: #7ac483;
   color: white;
   /* Add any additional styling you want */
 }

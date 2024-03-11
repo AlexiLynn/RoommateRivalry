@@ -8,6 +8,7 @@ import { isAuthenticated } from "./auth";
 const Layout = () => {
   const token = localStorage.getItem("token");
   const householdId = localStorage.getItem("householdId");
+  const userId = localStorage.getItem("userId");
   //checks if user has access to home page
   if (!isAuthenticated()) {
     //redirecting to login if failed
@@ -20,7 +21,7 @@ const Layout = () => {
       <main className={styles.Main}>
         <div className={styles.Column}>
           <div className={styles.ColumnContent}>
-            <Profile />
+            <Profile token={token} userId={userId} />
           </div>
         </div>
         <div className={styles.Column}>
