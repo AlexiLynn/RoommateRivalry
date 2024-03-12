@@ -29,3 +29,6 @@ https://www.figma.com/file/NTCxJ7Z0QpiJkA3RhJJGSC/Prototype-Design?type=design&n
    To investigate the backend, cd into packages/express-backend.
    From here you can view each of our classes by looking into the schemas directory.
    To view all functionality and helperfunctions familarize yourself with backend.js and services.js
+
+### UML Class Diagram
+![alt text](https://github.com/AlexiLynn/RoommateRivalry/blob/main/documents/UMLDiagram.png)
