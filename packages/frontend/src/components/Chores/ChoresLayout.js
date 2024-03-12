@@ -203,7 +203,7 @@ const ChoresLayout = () => {
               <h3>{chore.chore}</h3>
               <div>
                 <strong>Deadline:</strong>{" "}
-                {new Date(chore.deadline).toLocaleDateString()}
+                {new Date(chore.deadline).toLocaleDateString("en-US")}
               </div>
               <div>
                 <strong>Points:</strong> {chore.points}
@@ -229,7 +229,7 @@ const ChoresLayout = () => {
             <h3>{chore.chore}</h3>
             <div>
               <strong>Deadline:</strong>{" "}
-              {new Date(chore.deadline).toLocaleDateString()}
+              {new Date(chore.deadline).toLocaleDateString("en-US")}
             </div>
             <div>
               <strong>Points:</strong> {chore.points}

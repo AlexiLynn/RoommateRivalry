@@ -18,7 +18,9 @@ const TodoList = () => {
 
         if (response.ok) {
           const data = await response.json();
-          setMyChores(data);
+          //sorting chores by deadline
+          const sortedChores = data.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+          setMyChores(sortedChores);
         } else {
           console.error("Error fetching chores:", response.statusText);
         }
@@ -62,6 +64,7 @@ const TodoList = () => {
           <tr>
             <th>Chore</th>
             <th>Points</th>
+            <th>Deadline</th>
             <th>Done</th>
           </tr>
         </thead>
@@ -70,7 +73,8 @@ const TodoList = () => {
             <tr key={chore._id} style={{ textDecoration: chore.completed ? "line-through" : "none" }}>
               <td>{chore.chore}</td>
               <td>{chore.points}</td>
-              <td>
+              <td>{new Date(chore.deadline).toLocaleDateString("en-US")}</td>
+              <td style={{ paddingLeft: "22px" }}>
                 <input
                   type="checkbox"
                   checked={chore.completed}
