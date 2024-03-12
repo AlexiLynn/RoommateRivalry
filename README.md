@@ -9,6 +9,7 @@ https://black-tree-0bbdcd51e.5.azurestaticapps.net/
 ### UI Prototype(s):
 Hi-Fi Prototype: (Last Updated: 3/12/24)
 https://www.figma.com/file/NTCxJ7Z0QpiJkA3RhJJGSC/Prototype-Design?type=design&node-id=288-2192&mode=design&t=030rC9V6GWO19PN2-0
+
 Low-Fi Prototype: (Last Updated: 2/15/24)
 https://www.figma.com/file/NTCxJ7Z0QpiJkA3RhJJGSC/Prototype-Design?type=design&node-id=7-3900&mode=design&t=J9UTZoVk9tDKWTwj-0
 
