@@ -127,15 +127,13 @@ app.post("/login", async (req, res) => {
     );
     console.log("TOKEN", token);
 
-    res
-      .status(200)
-      .json({
-        message: "Sign-in successful",
-        token,
-        userId: user[0]._id,
-        householdId: user[0].householdId,
-        userName: user[0].name
-      });
+    res.status(200).json({
+      message: "Sign-in successful",
+      token,
+      userId: user[0]._id,
+      householdId: user[0].householdId,
+      userName: user[0].name
+    });
   } catch (error) {
     console.error(error);
     res
@@ -313,7 +311,6 @@ app.post("/chore", authenticateToken, async (req, res) => {
       userId,
       userName
     } = req.body;
-    const deadlineTimestamp = deadline.getTime();
     const userIdObject = new mongoose.Types.ObjectId(userId);
     const householdIdObject = new mongoose.Types.ObjectId(
       householdId
@@ -321,7 +318,7 @@ app.post("/chore", authenticateToken, async (req, res) => {
     const newChore = {
       chore,
       completed,
-      deadline: deadlineTimestamp,
+      deadline,
       points,
       householdId: householdIdObject,
       userId: userIdObject,
@@ -439,12 +436,10 @@ app.get(
       //deleting chore from db
       await services.deleteChore(choreId);
 
-      res
-        .status(200)
-        .json({
-          message: "Chore completed successfully",
-          pointsEarned: chore.points
-        });
+      res.status(200).json({
+        message: "Chore completed successfully",
+        pointsEarned: chore.points
+      });
     } catch (error) {
       console.log(error);
       res.status(500).send("An error occurred in the server.");
