@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import services from "./services.js";
 import bcrypt from "bcrypt";
+import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 
 const app = express();
@@ -44,21 +45,20 @@ app.get("/", authenticateToken, (req, res) => {
 
 app.post("/signup", async (req, res) => {
   try {
-    const { name, email, phone, password, groupName } = req.body;
+    const { name, email, phone, password, groupName } =
+      req.body;
 
     //checking if email already exists in db
-    const existingUser =
-      await services.findUserByEmail(email);
+    const existingUser = await services.findUserByEmail(email);
     if (existingUser && existingUser.length > 0) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "An account associated with this email already exists"
-        });
+      return res.status(400).json({
+        error:
+          "An account associated with this email already exists"
+      });
     }
 
-    let household = await services.findHouseholdByGroupName(groupName);
+    let household =
+      await services.findHouseholdByGroupName(groupName);
 
     //if household does not exist, creates one
     if (!household) {
@@ -77,7 +77,7 @@ app.post("/signup", async (req, res) => {
       email,
       password: hashedPassword,
       phone,
-      householdId: household._id,
+      householdId: household._id
     };
 
     //adding user
@@ -87,7 +87,7 @@ app.post("/signup", async (req, res) => {
     household.roommates.push(savedUser._id);
     await household.save();
 
-    res.status(201).json({ success: true, user: savedUser});
+    res.status(201).json({ success: true, user: savedUser });
   } catch (error) {
     console.log(error);
     res
@@ -120,10 +120,22 @@ app.post("/login", async (req, res) => {
     }
 
     //generating JWT token
-    const token = jwt.sign({ email: user[0].email, id: user[0]._id }, secretKey, { expiresIn: "15m" });
+    const token = jwt.sign(
+      { email: user[0].email, id: user[0]._id },
+      secretKey,
+      { expiresIn: "15m" }
+    );
     console.log("TOKEN", token);
 
-    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id, householdId: user[0].householdId, userName: user[0].name });
+    res
+      .status(200)
+      .json({
+        message: "Sign-in successful",
+        token,
+        userId: user[0]._id,
+        householdId: user[0].householdId,
+        userName: user[0].name
+      });
   } catch (error) {
     console.error(error);
     res
@@ -134,17 +146,21 @@ app.post("/login", async (req, res) => {
 
 //Finds Household By ID
 //  GET /home/<householdId>
-app.get("/home/:householdId", authenticateToken, async (req, res) => {
-  const householdId = req.params["householdId"];
-  try {
-    const result =
-      await services.findHouseholdByID(householdId);
-    res.send(result);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error ocurred in the server.");
+app.get(
+  "/home/:householdId",
+  authenticateToken,
+  async (req, res) => {
+    const householdId = req.params["householdId"];
+    try {
+      const result =
+        await services.findHouseholdByID(householdId);
+      res.send(result);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("An error ocurred in the server.");
+    }
   }
-});
+);
 
 //Finds Users By HouseHold ID
 //  GET /users?home=<householdId>
@@ -169,20 +185,24 @@ app.get("/users", authenticateToken, async (req, res) => {
 
 //Finds User By ID
 //  GET /user/<userId>
-app.get("/user/:userId", authenticateToken, async (req, res) => {
-  const id = req.params["userId"];
-  try {
-    const result = await services.findUserById(id);
-    if (result === undefined) {
-      res.status(404).send("Resource not found.");
-    } else {
-      res.status(200).send(result);
+app.get(
+  "/user/:userId",
+  authenticateToken,
+  async (req, res) => {
+    const id = req.params["userId"];
+    try {
+      const result = await services.findUserById(id);
+      if (result === undefined) {
+        res.status(404).send("Resource not found.");
+      } else {
+        res.status(200).send(result);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("An error ocurred in the server.");
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error ocurred in the server.");
   }
-});
+);
 
 //Adds A User
 //  POST /user
@@ -195,25 +215,32 @@ app.post("/user", authenticateToken, async (req, res) => {
 
 //Updates User
 //  PATCH /user/<userId> + body
-app.patch("/user/:userId", authenticateToken, async (req, res) => {
-  const userId = req.params["userId"];
-  const change = req.body;
-  let result = await services.updateUser(userId, change);
-  res.send(result);
-});
+app.patch(
+  "/user/:userId",
+  authenticateToken,
+  async (req, res) => {
+    const userId = req.params["userId"];
+    const change = req.body;
+    let result = await services.updateUser(userId, change);
+    res.send(result);
+  }
+);
 
 //Deletes User By Id
 //  DELETE /user/<userId>
-app.delete("/user/:userId", authenticateToken, async (req, res) => {
-  const id = req.params["userId"];
-  let result = await services.deleteUser(id);
-  if (result === undefined) {
-    res.status(404).send("Resource not found.");
-  } else {
-    res.status(204).send();
+app.delete(
+  "/user/:userId",
+  authenticateToken,
+  async (req, res) => {
+    const id = req.params["userId"];
+    let result = await services.deleteUser(id);
+    if (result === undefined) {
+      res.status(404).send("Resource not found.");
+    } else {
+      res.status(204).send();
+    }
   }
-});
-
+);
 
 //GET chores for user or household
 app.get("/chore", authenticateToken, async (req, res) => {
@@ -223,25 +250,40 @@ app.get("/chore", authenticateToken, async (req, res) => {
   //checks if user is accessing its own chores info
   const authenticatedUserId = req.user.id;
   if (userId && authenticatedUserId !== userId) {
-    return res.status(403).send("Access denied. You can only retrieve your own chores.");
+    return res
+      .status(403)
+      .send(
+        "Access denied. You can only retrieve your own chores."
+      );
   }
 
   try {
     //checks if user is accessing their own household chores info
     if (householdId != undefined) {
-      const household = await services.findHouseholdByID(householdId);
-      if (!household || !household.roommates.includes(authenticatedUserId)) {
-        return res.status(403).send("Access denied. You are not a member of this household.");
+      const household =
+        await services.findHouseholdByID(householdId);
+      if (
+        !household ||
+        !household.roommates.includes(authenticatedUserId)
+      ) {
+        return res
+          .status(403)
+          .send(
+            "Access denied. You are not a member of this household."
+          );
       }
 
-      const result = await services.findChoresByHouseholdId(householdId);
+      const result =
+        await services.findChoresByHouseholdId(householdId);
       res.send(result);
     } else if (userId != undefined) {
       const result = await services.findChoresByUserId(userId);
       res.send(result);
     } else {
       console.log(
-        new Error("Usage = /chore?home=<householdId> or ?user=<userId>")
+        new Error(
+          "Usage = /chore?home=<householdId> or ?user=<userId>"
+        )
       );
       res.status(400).send("Improper Usage");
     }
@@ -262,10 +304,20 @@ app.get("/chore", authenticateToken, async (req, res) => {
 
 app.post("/chore", authenticateToken, async (req, res) => {
   try {
-    const { chore, completed, deadline, points, householdId, userId, userName } = req.body;
+    const {
+      chore,
+      completed,
+      deadline,
+      points,
+      householdId,
+      userId,
+      userName
+    } = req.body;
     const deadlineTimestamp = deadline.getTime();
     const userIdObject = new mongoose.Types.ObjectId(userId);
-    const householdIdObject = new mongoose.Types.ObjectId(householdId);
+    const householdIdObject = new mongoose.Types.ObjectId(
+      householdId
+    );
     const newChore = {
       chore,
       completed,
@@ -302,77 +354,103 @@ app.post("/chore", authenticateToken, async (req, res) => {
 
 //Find a chore by choreID
 //  GET /chore/<choreId>
-app.get("/chore/:choreId", authenticateToken, async (req, res) => {
-  const id = req.params.choreId;
-  try {
-    const result = await services.findChoreById(id);
-    if (result === undefined) {
-      res.status(404).send("Resource not found.");
-    } else {
-      res.send(result);
+app.get(
+  "/chore/:choreId",
+  authenticateToken,
+  async (req, res) => {
+    const id = req.params.choreId;
+    try {
+      const result = await services.findChoreById(id);
+      if (result === undefined) {
+        res.status(404).send("Resource not found.");
+      } else {
+        res.send(result);
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("An error ocurred in the server.");
     }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error ocurred in the server.");
   }
-});
+);
 
 //Updates Chore
 //  PATCH /chore/<choreId> + body
-app.patch("/chore/:choreId", authenticateToken, async (req, res) => {
-  const choreId = req.params["choreId"];
-  const change = req.body;
-  let result = await services.updateChore(choreId, change);
-  res.send(result);
-});
+app.patch(
+  "/chore/:choreId",
+  authenticateToken,
+  async (req, res) => {
+    const choreId = req.params["choreId"];
+    const change = req.body;
+    let result = await services.updateChore(choreId, change);
+    res.send(result);
+  }
+);
 
 //Deletes Chore By Id
 //  DELETE /chore/<choreId>
-app.delete("/chore/:choreId", authenticateToken, async (req, res) => {
-  const id = req.params["choreId"];
-  let result = await services.deleteChore(id);
-  if (result === undefined) {
-    res.status(404).send("Resource not found.");
-  } else {
-    res.status(204).send();
+app.delete(
+  "/chore/:choreId",
+  authenticateToken,
+  async (req, res) => {
+    const id = req.params["choreId"];
+    let result = await services.deleteChore(id);
+    if (result === undefined) {
+      res.status(404).send("Resource not found.");
+    } else {
+      res.status(204).send();
+    }
   }
-});
+);
 
 // GET chore info, update user's points, and delete chore
 // GET /complete-chore/<choreId>
-app.get("/complete-chore/:choreId", authenticateToken, async (req, res) => {
-  const choreId = req.params["choreId"];
-  const authenticatedUserId = req.user.id;
+app.get(
+  "/complete-chore/:choreId",
+  authenticateToken,
+  async (req, res) => {
+    const choreId = req.params["choreId"];
+    const authenticatedUserId = req.user.id;
 
-  try {
-    //get chore info
-    const chore = await services.findChoreById(choreId);
+    try {
+      //get chore info
+      const chore = await services.findChoreById(choreId);
 
-    //check if chore exists
-    if (!chore) {
-      return res.status(404).send("Chore not found.");
+      //check if chore exists
+      if (!chore) {
+        return res.status(404).send("Chore not found.");
+      }
+
+      //check if the user is authorized to complete this chore
+      if (chore.userId.toString() !== authenticatedUserId) {
+        return res
+          .status(403)
+          .send(
+            "Access denied. You can only access/update your own chores."
+          );
+      }
+
+      //updating user points
+      const user = await services.findUserById(
+        authenticatedUserId
+      );
+      user.points += chore.points;
+      await user.save();
+
+      //deleting chore from db
+      await services.deleteChore(choreId);
+
+      res
+        .status(200)
+        .json({
+          message: "Chore completed successfully",
+          pointsEarned: chore.points
+        });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send("An error occurred in the server.");
     }
-
-    //check if the user is authorized to complete this chore
-    if (chore.userId.toString() !== authenticatedUserId) {
-      return res.status(403).send("Access denied. You can only access/update your own chores.");
-    }
-
-    //updating user points
-    const user = await services.findUserById(authenticatedUserId);
-    user.points += chore.points;
-    await user.save();
-
-    //deleting chore from db
-    await services.deleteChore(choreId);
-
-    res.status(200).json({ message: "Chore completed successfully", pointsEarned: chore.points });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error occurred in the server.");
   }
-});
-
+);
 
 const invalidTokens = new Set();
 
@@ -382,7 +460,6 @@ app.post("/logout", authenticateToken, (req, res) => {
   invalidTokens.add(token);
   res.status(200).json({ message: "Token invalidated" });
 });
-
 
 app.listen(process.env.PORT || port, () => {
   console.log("REST API is listening.");

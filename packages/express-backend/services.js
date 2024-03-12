@@ -60,7 +60,7 @@ function addUser(user) {
   return promise;
 }
 
-function updateUser(userId, user){
+function updateUser(userId, user) {
   return userModel.findByIdAndUpdate(userId, user);
 }
 
@@ -98,8 +98,8 @@ function findChoresByUserId(userId) {
   return choreModel.find({ userId: userId });
 }
 
-function updateChore(choreId, chore){
-  return choreModel.findByIdAndUpdate(choreId, chore)
+function updateChore(choreId, chore) {
+  return choreModel.findByIdAndUpdate(choreId, chore);
 }
 
 function deleteChore(choreId) {
