@@ -7,18 +7,15 @@ import choreModel from "./schema/chore.js";
 mongoose.set("debug", true);
 dotenv.config();
 const uri = process.env.MONGODB_URI;
+// Hard code the uri for jest testing
 
+/* istanbul ignore next */
 mongoose
   .connect(uri, { dbName: "RoomieData" })
   .catch((error) => console.log(error));
 
-//HOUSEHOLD SERVICES
 
-function getHousehold() {
-  let promise;
-  promise = householdModel.find();
-  return promise;
-}
+//HOUSEHOLD SERVICES
 
 function findHouseholdByID(householdId) {
   return householdModel.findById(householdId);
@@ -38,13 +35,8 @@ function deleteHousehold(householdId) {
   return householdModel.findByIdAndDelete(householdId);
 }
 
-//USER SERVICES
 
-function getUsers() {
-  let promise;
-  promise = userModel.find();
-  return promise;
-}
+//USER SERVICES
 
 function findUserById(userId) {
   return userModel.findById(userId);
@@ -72,13 +64,8 @@ function findUserByEmail(email) {
   return userModel.find({ email: email });
 }
 
-//CHORE SERVICES
 
-function getChores() {
-  let promise;
-  promise = choreModel.find();
-  return promise;
-}
+//CHORE SERVICES
 
 function addChore(chore) {
   const choreToAdd = new choreModel(chore);
@@ -107,19 +94,16 @@ function deleteChore(choreId) {
 }
 
 export default {
-  getHousehold,
   findHouseholdByID,
   findHouseholdByGroupName,
   addHousehold,
   deleteHousehold,
-  getUsers,
   findUserById,
   findUsersByHouseholdId,
   addUser,
   updateUser,
   deleteUser,
   findUserByEmail,
-  getChores,
   addChore,
   findChoreById,
   findChoresByHouseholdId,
