@@ -14,7 +14,6 @@ mongoose
   .connect(uri, { dbName: "RoomieData" })
   .catch((error) => console.log(error));
 
-
 //HOUSEHOLD SERVICES
 
 function findHouseholdByID(householdId) {
@@ -34,7 +33,6 @@ function addHousehold(home) {
 function deleteHousehold(householdId) {
   return householdModel.findByIdAndDelete(householdId);
 }
-
 
 //USER SERVICES
 
@@ -64,13 +62,12 @@ function findUserByEmail(email) {
   return userModel.find({ email: email });
 }
 
-
 //CHORE SERVICES
 
 function addChore(chore) {
   const choreToAdd = new choreModel(chore);
   const promise = choreToAdd.save();
-  return promise.catch((error) => console.log("Error", error));
+  return promise;
 }
 
 function findChoreById(choreId) {
