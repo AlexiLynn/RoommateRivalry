@@ -3,7 +3,6 @@ import defaultImage from "../images/clean.png";
 import "./ProfileStyle.css";
 
 const Profile = ({ token, userId }) => {
- const [editMode, setEditMode] = useState(false);
  const [user, setUser] = useState([]);
  const [loading, setLoading] = useState(false);
  const [error, setError] = useState('');
@@ -42,52 +41,23 @@ const Profile = ({ token, userId }) => {
    fetchUserById();
  }, [userId, token]);
 
- const handleEditClick = () => {
-   setEditMode(true);
- };
-
- const handleSaveClick = () => {
-   setEditMode(false);
-   // Logic to update the user's name on the server would go here
- };
-
- const handleNameChange = (e) => {
-   setUser({ ...user, name: e.target.value });
- };
-
  if (loading) return <div>Loading...</div>;
  if (error) return <div>Error: {error}</div>;
 
  return (
    <div className="Profile">
-     {editMode ? (
-       <div>
-         <label htmlFor="name">Name:</label>
-         <input
-           type="text"
-           id="name"
-           value={user.name}
-           onChange={handleNameChange}
-         />
-         <button onClick={handleSaveClick}>Save</button>
-       </div>
-     ) : (
-       <>
-         <div className="ProfileInfo">
-           <div className="ImageContainer">
-             <img
-               src={user.image}
-               alt="Profile"
-               style={{ maxWidth: "150px", maxHeight: "150px", width: "auto", height: "auto" }}
-             />
-           </div>
-           <div className="TextContainer">
-             <h2>{user.name}</h2>
-           </div>
-         </div>
-         <button onClick={handleEditClick}>Edit</button>
-       </>
-     )}
+      <div className="ProfileInfo">
+        <div className="ImageContainer">
+          <img
+            src={user.image}
+            alt="Profile"
+            style={{ maxWidth: "150px", maxHeight: "150px", width: "auto", height: "auto" }}
+          />
+        </div>
+        <div className="TextContainer">
+          <h2>{user.name}</h2>
+        </div>
+      </div>
    </div>
  );
 };
