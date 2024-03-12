@@ -83,7 +83,7 @@ function getChores() {
 function addChore(chore) {
   const choreToAdd = new choreModel(chore);
   const promise = choreToAdd.save();
-  return promise;
+  return promise.catch((error) => console.log("Error", error));
 }
 
 function findChoreById(choreId) {

@@ -14,6 +14,7 @@ const Navbar = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("userId");
     localStorage.removeItem("householdId");
+    localStorage.removeItem("userName");
     window.location.pathname = "/";
   };
 

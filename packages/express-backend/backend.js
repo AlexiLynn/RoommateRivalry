@@ -123,7 +123,7 @@ app.post("/login", async (req, res) => {
     const token = jwt.sign({ email: user[0].email, id: user[0]._id }, secretKey, { expiresIn: "15m" });
     console.log("TOKEN", token);
 
-    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id, householdId: user[0].householdId });
+    res.status(200).json({ message: "Sign-in successful", token, userId: user[0]._id, householdId: user[0].householdId, userName: user[0].name });
   } catch (error) {
     console.error(error);
     res
@@ -253,11 +253,51 @@ app.get("/chore", authenticateToken, async (req, res) => {
 
 //Adds A Chore
 //  POST /chore
+//app.post("/chore", async (req, res) => {
+//  const chore = req.body;
+//  const savedChore = await services.addChore(chore);
+//  if (savedChore) res.status(201).send(savedChore);
+//  else res.status(500).end();
+//});
+
 app.post("/chore", authenticateToken, async (req, res) => {
-  const chore = req.body;
-  const savedChore = await services.addUser(chore);
-  if (savedChore) res.status(201).send(savedChore);
-  else res.status(500).end();
+  try {
+    const { chore, completed, deadline, points, householdId, userId, userName } = req.body;
+    const deadlineTimestamp = deadline.getTime();
+    const userIdObject = new mongoose.Types.ObjectId(userId);
+    const householdIdObject = new mongoose.Types.ObjectId(householdId);
+    const newChore = {
+      chore,
+      completed,
+      deadline: deadlineTimestamp,
+      points,
+      householdId: householdIdObject,
+      userId: userIdObject,
+      userName
+    };
+
+    console.log("newChore: ", newChore);
+
+    const savedChore = await services.addChore(newChore);
+
+    if (savedChore) {
+      res.status(201).json({
+        success: true,
+        data: savedChore
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        error: "Failed to save chore"
+      });
+    }
+  } catch (error) {
+    console.error("Error adding chore:", error);
+    res.status(500).json({
+      success: false,
+      error: "Internal Server Error"
+    });
+  }
 });
 
 //Find a chore by choreID
