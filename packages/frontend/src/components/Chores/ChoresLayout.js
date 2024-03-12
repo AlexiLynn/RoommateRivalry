@@ -80,15 +80,6 @@ const ChoresLayout = () => {
         throw new Error("Chore not added successfully");
       }
     } catch (error) {
-      // TODO: Remove these lines once the front to backend is working - this ONLY updates the frontend for demo purposes
-      setMyHouseholdChores((prevChores) => [...prevChores, choreToAdd]);
-      setMyChores((prevChores) => [...prevChores, choreToAdd]);
-      setNewChore({
-        description: "",
-        deadline: new Date(),
-        points: 0
-      });
-
       console.error("Error adding chore:", error);
     }
   };

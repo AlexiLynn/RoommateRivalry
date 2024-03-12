@@ -291,15 +291,6 @@ app.get("/chore", authenticateToken, async (req, res) => {
   }
 });
 
-//Adds A Chore
-//  POST /chore
-//app.post("/chore", async (req, res) => {
-//  const chore = req.body;
-//  const savedChore = await services.addChore(chore);
-//  if (savedChore) res.status(201).send(savedChore);
-//  else res.status(500).end();
-//});
-
 app.post("/chore", authenticateToken, async (req, res) => {
   try {
     const {
