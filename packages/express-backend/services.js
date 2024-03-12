@@ -6,10 +6,8 @@ import choreModel from "./schema/chore.js";
 
 mongoose.set("debug", true);
 dotenv.config();
-//const uri = process.env.MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 // Hard code the uri for jest testing
-const uri =
-  "mongodb+srv://admin:Landlord404@roommarterivalry.ckbmvrb.mongodb.net/?retryWrites=true&w=majority&appName=RoommateRivalry";
 
 /* istanbul ignore next */
 mongoose
