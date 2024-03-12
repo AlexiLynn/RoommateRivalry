@@ -6,14 +6,15 @@ import choreModel from "./schema/chore.js";
 
 mongoose.set("debug", true);
 dotenv.config();
-const uri = process.env.MONGODB_URI;
+//const uri = process.env.MONGODB_URI;
 // Hard code the uri for jest testing
+const uri =
+  "mongodb+srv://admin:Landlord404@roommarterivalry.ckbmvrb.mongodb.net/?retryWrites=true&w=majority&appName=RoommateRivalry";
 
 /* istanbul ignore next */
 mongoose
   .connect(uri, { dbName: "RoomieData" })
   .catch((error) => console.log(error));
-
 
 //HOUSEHOLD SERVICES
 
@@ -34,7 +35,6 @@ function addHousehold(home) {
 function deleteHousehold(householdId) {
   return householdModel.findByIdAndDelete(householdId);
 }
-
 
 //USER SERVICES
 
@@ -64,13 +64,12 @@ function findUserByEmail(email) {
   return userModel.find({ email: email });
 }
 
-
 //CHORE SERVICES
 
 function addChore(chore) {
   const choreToAdd = new choreModel(chore);
   const promise = choreToAdd.save();
-  return promise.catch((error) => console.log("Error", error));
+  return promise;
 }
 
 function findChoreById(choreId) {
