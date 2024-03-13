@@ -31,7 +31,7 @@ const Layout = () => {
         </div>
         <div className={styles.Column}>
           <h2>Roomies</h2>
-          <p>Weekly Leaderboard</p>
+          <p>Lifetime Leaderboard</p>
           <UsersTable token={token} householdId={householdId} />
         </div>
       </main>
